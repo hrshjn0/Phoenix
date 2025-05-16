@@ -7,7 +7,7 @@ export default function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           <div>
             <h3 className="text-xl font-bold text-white">Phoenix</h3>
-            <p className="mt-4 text-gray-400">The premier marketplace for digital product transactions.</p>
+            <p className="mt-4 text-gray-400">The premier platform for tech product owners to connect with investors.</p>
             <div className="mt-4 flex space-x-6">
               <a href="#" className="text-gray-400 hover:text-gray-300">
                 <span className="sr-only">Facebook</span>
