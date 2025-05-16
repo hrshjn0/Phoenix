@@ -6,7 +6,7 @@ export default function Hero() {
     <div className="relative bg-dark">
       <div className="absolute inset-0">
         <img 
-          src="https://images.unsplash.com/photo-1519389950473-47ba0277781c?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&h=1080" 
+          src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&h=1080" 
           alt="Digital marketplace" 
           className="w-full h-full object-cover" 
         />
