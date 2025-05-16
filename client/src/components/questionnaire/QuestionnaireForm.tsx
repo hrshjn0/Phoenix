@@ -386,7 +386,7 @@ export default function QuestionnaireForm() {
 
                       <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start">
                         <div className="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
-                          Logo Upload
+                          Brochure Upload
                         </div>
                         <div className="mt-1 sm:mt-0 sm:col-span-2">
                           <div className="max-w-lg flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-md">
@@ -400,7 +400,7 @@ export default function QuestionnaireForm() {
                                 <p className="pl-1">or drag and drop</p>
                               </div>
                               <p className="text-xs text-gray-500">
-                                PNG, JPG, GIF up to 10MB
+                                PDF, PNG, JPG up to 10MB
                               </p>
                             </div>
                           </div>
