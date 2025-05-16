@@ -10,10 +10,10 @@ export default function HomePage() {
   return (
     <>
       <Helmet>
-        <title>Phoenix - Digital Product Marketplace</title>
-        <meta name="description" content="Phoenix is the premier marketplace for buying and selling established digital products and services. Connect with quality investors or find your next opportunity." />
-        <meta property="og:title" content="Phoenix - Digital Product Marketplace" />
-        <meta property="og:description" content="The premier marketplace for buying and selling established digital products and services." />
+        <title>Phoenix - Tech Product Investment Platform</title>
+        <meta name="description" content="Phoenix is the premier platform for tech product owners to connect with investors. Find your next investment opportunity or secure funding for your tech product." />
+        <meta property="og:title" content="Phoenix - Tech Product Investment Platform" />
+        <meta property="og:description" content="The premier platform for tech product owners to connect with investors." />
         <meta property="og:type" content="website" />
       </Helmet>
       <div className="flex flex-col min-h-screen">

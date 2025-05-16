@@ -65,10 +65,10 @@ export default function SearchResultsPage() {
   return (
     <>
       <Helmet>
-        <title>Search Results | Phoenix Marketplace</title>
-        <meta name="description" content="Browse digital products available for acquisition on Phoenix Marketplace. Filter by industry, age, and revenue to find your next investment opportunity." />
-        <meta property="og:title" content="Search Results | Phoenix Marketplace" />
-        <meta property="og:description" content="Find your next digital product investment on Phoenix Marketplace." />
+        <title>Search Results | Phoenix</title>
+        <meta name="description" content="Browse tech products available for investment on Phoenix. Filter by industry, age, and revenue to find your next investment opportunity." />
+        <meta property="og:title" content="Search Results | Phoenix" />
+        <meta property="og:description" content="Find your next tech product investment on Phoenix." />
         <meta property="og:type" content="website" />
       </Helmet>
       <div className="flex flex-col min-h-screen">
