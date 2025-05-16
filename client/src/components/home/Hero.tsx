@@ -32,7 +32,7 @@ export default function Hero() {
             asChild
             size="lg"
             variant="secondary"
-            className="w-full sm:w-auto bg-secondary text-white hover:bg-green-700"
+            className="w-full sm:w-auto bg-gray-700 text-white hover:bg-gray-800"
           >
             <Link href="/sellers">
               Enter as Product Owner
