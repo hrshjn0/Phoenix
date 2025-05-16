@@ -10,11 +10,11 @@ export default function SellersHero() {
           alt="Tech startup workspace" 
           className="w-full h-full object-cover" 
         />
-        <div className="absolute inset-0 bg-dark bg-opacity-70"></div>
+        <div className="absolute inset-0 bg-slate-900 bg-opacity-85"></div>
       </div>
       <div className="relative max-w-7xl mx-auto py-24 px-4 sm:py-32 sm:px-6 lg:px-8">
-        <h1 className="text-4xl font-extrabold tracking-tight text-white sm:text-5xl lg:text-6xl">For Product Owners</h1>
-        <p className="mt-6 text-xl text-white max-w-3xl">Ready to sell your digital product? Connect with qualified investors and buyers looking for established businesses like yours.</p>
+        <h1 className="text-4xl font-extrabold tracking-tight text-white sm:text-5xl lg:text-6xl">Get in Front of Investors Ready to Back Great Products</h1>
+        <p className="mt-6 text-xl text-gray-200 max-w-3xl">From application to investor match, our streamlined process helps you find the right backers for your tech product.</p>
         <div className="mt-10">
           <Button 
             asChild 
