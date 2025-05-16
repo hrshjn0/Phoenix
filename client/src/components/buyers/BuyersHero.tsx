@@ -10,11 +10,11 @@ export default function BuyersHero() {
           alt="Business meeting" 
           className="w-full h-full object-cover" 
         />
-        <div className="absolute inset-0 bg-dark bg-opacity-80"></div>
+        <div className="absolute inset-0 bg-slate-900 bg-opacity-85"></div>
       </div>
       <div className="relative max-w-7xl mx-auto py-24 px-4 sm:py-32 sm:px-6 lg:px-8">
         <h1 className="text-4xl font-extrabold tracking-tight text-white sm:text-5xl lg:text-6xl">Discover High-Growth Tech Products Seeking Capital</h1>
-        <p className="mt-6 text-xl text-white max-w-3xl">Accelerate your portfolio with vetted tech-enabled products ready to scale with strategic investment.</p>
+        <p className="mt-6 text-xl text-gray-200 max-w-3xl">Accelerate your portfolio with vetted tech-enabled products ready to scale with strategic investment.</p>
         <div className="mt-10">
           <Button asChild size="lg">
             <Link href="/search">
