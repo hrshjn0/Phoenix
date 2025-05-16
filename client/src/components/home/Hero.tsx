@@ -3,8 +3,16 @@ import { Button } from "@/components/ui/button";
 
 export default function Hero() {
   return (
-    <div className="bg-gradient-to-r from-slate-900 via-gray-800 to-slate-900 py-16 sm:py-24">
-      <div className="max-w-7xl mx-auto py-16 px-4 sm:py-24 sm:px-6 lg:px-8">
+    <div className="relative bg-dark">
+      <div className="absolute inset-0">
+        <img 
+          src="https://images.unsplash.com/photo-1563986768609-322da13575f3?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&h=1080" 
+          alt="Digital marketplace" 
+          className="w-full h-full object-cover" 
+        />
+        <div className="absolute inset-0 bg-slate-900 bg-opacity-85"></div>
+      </div>
+      <div className="relative max-w-7xl mx-auto py-24 px-4 sm:py-32 sm:px-6 lg:px-8">
         <h1 className="text-4xl font-extrabold tracking-tight text-white sm:text-5xl lg:text-6xl">Find an investor for your Tech Product in 3 easy steps</h1>
         <p className="mt-6 text-xl text-gray-200 max-w-3xl">Join our platform to connect with investors actively looking to fund innovative tech products like yours. Skip the pitch decks and guesswork, our 3-step process makes investor discovery simple, fast, and effective.</p>
         <div className="mt-10 flex flex-col sm:flex-row gap-4">
