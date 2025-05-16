@@ -13,10 +13,14 @@ export default function Hero() {
         <div className="absolute inset-0 bg-slate-900 bg-opacity-85"></div>
       </div>
       <div className="relative max-w-7xl mx-auto py-24 px-4 sm:py-32 sm:px-6 lg:px-8">
-        <h1 className="text-4xl font-extrabold tracking-tight text-white sm:text-5xl lg:text-6xl">
-          Your Tech-Enabled Product Deserves Investment.<br />
-          Find an Investor Now.
-        </h1>
+        <div>
+          <h1 className="text-3xl font-extrabold tracking-tight text-white sm:text-4xl lg:text-5xl">
+            Your Tech-Enabled Product Deserves Investment.
+          </h1>
+          <h1 className="text-3xl font-extrabold tracking-tight text-white sm:text-4xl lg:text-5xl mt-2">
+            Find an Investor Now.
+          </h1>
+        </div>
         <p className="mt-6 text-xl text-gray-200 max-w-3xl">Join our platform to connect with investors actively looking to fund innovative tech products like yours. Skip the pitch decks and guesswork, our 3-step process makes investor discovery simple, fast, and effective.</p>
         <div className="mt-10 flex flex-col sm:flex-row gap-4">
           <Button
