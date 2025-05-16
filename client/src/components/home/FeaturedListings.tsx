@@ -41,7 +41,7 @@ export default function FeaturedListings() {
         <div className="text-center">
           <h2 className="text-3xl font-extrabold text-dark sm:text-4xl">Featured Listings</h2>
           <p className="mt-4 text-lg text-gray-500 max-w-2xl mx-auto">
-            Browse some of our top opportunities currently available on the marketplace.
+            Browse some of our top opportunities currently available.
           </p>
         </div>
 
