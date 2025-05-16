@@ -58,7 +58,7 @@ export default function HowItWorksPage() {
                         {/* Step 1 */}
                         <div className="flex">
                           <div className="flex-shrink-0">
-                            <div className="flex items-center justify-center h-12 w-12 rounded-md bg-secondary text-white">
+                            <div className="flex items-center justify-center h-12 w-12 rounded-md bg-gray-700 text-white">
                               <span className="font-bold">1</span>
                             </div>
                           </div>
@@ -73,7 +73,7 @@ export default function HowItWorksPage() {
                         {/* Step 2 */}
                         <div className="flex">
                           <div className="flex-shrink-0">
-                            <div className="flex items-center justify-center h-12 w-12 rounded-md bg-secondary text-white">
+                            <div className="flex items-center justify-center h-12 w-12 rounded-md bg-gray-700 text-white">
                               <span className="font-bold">2</span>
                             </div>
                           </div>
@@ -88,7 +88,7 @@ export default function HowItWorksPage() {
                         {/* Step 3 */}
                         <div className="flex">
                           <div className="flex-shrink-0">
-                            <div className="flex items-center justify-center h-12 w-12 rounded-md bg-secondary text-white">
+                            <div className="flex items-center justify-center h-12 w-12 rounded-md bg-gray-700 text-white">
                               <span className="font-bold">3</span>
                             </div>
                           </div>
@@ -103,7 +103,7 @@ export default function HowItWorksPage() {
                         {/* Step 4 */}
                         <div className="flex">
                           <div className="flex-shrink-0">
-                            <div className="flex items-center justify-center h-12 w-12 rounded-md bg-secondary text-white">
+                            <div className="flex items-center justify-center h-12 w-12 rounded-md bg-gray-700 text-white">
                               <span className="font-bold">4</span>
                             </div>
                           </div>
