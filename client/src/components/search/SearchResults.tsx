@@ -3,7 +3,6 @@ import { Link } from "wouter";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Product } from "@shared/schema";
-import StarRating from "@/components/ui/star-rating";
 import { Users, DollarSign } from "lucide-react";
 
 interface SearchResultsProps {
@@ -70,9 +69,6 @@ export default function SearchResults({ products, isLoading, error }: SearchResu
                           {product.age}
                         </span>
                       </div>
-                      {product.thirdPartyRating && (
-                        <StarRating rating={parseFloat(product.thirdPartyRating)} />
-                      )}
                     </div>
                     <Link href={`/product/${product.id}`} className="mt-4 block">
                       <h3 className="text-xl font-semibold text-dark hover:text-primary">{product.headline}</h3>
