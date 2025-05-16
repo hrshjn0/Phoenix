@@ -7,7 +7,6 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Search } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
 import { Product } from "@shared/schema";
-import StarRating from "@/components/ui/star-rating";
 
 export default function ProductListings() {
   const [industry, setIndustry] = useState<string>("All Industries");
@@ -112,9 +111,7 @@ export default function ProductListings() {
                           {product.age}
                         </span>
                       </div>
-                      {product.thirdPartyRating && (
-                        <StarRating rating={parseFloat(product.thirdPartyRating)} />
-                      )}
+
                     </div>
                     <Link href={`/product/${product.id}`} className="mt-4 block">
                       <h3 className="text-xl font-semibold text-dark hover:text-primary">{product.headline}</h3>

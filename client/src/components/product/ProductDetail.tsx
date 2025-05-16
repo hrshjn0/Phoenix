@@ -6,7 +6,6 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { useQuery } from "@tanstack/react-query";
 import { Product } from "@shared/schema";
-import StarRating from "@/components/ui/star-rating";
 import { ChevronLeft, Check } from "lucide-react";
 
 export default function ProductDetail() {
@@ -73,13 +72,6 @@ export default function ProductDetail() {
             </div>
             
             <h1 className="text-3xl font-extrabold tracking-tight text-dark sm:text-4xl">{product.headline}</h1>
-            
-            {product.thirdPartyRating && (
-              <div className="mt-2 flex items-center">
-                <StarRating rating={parseFloat(product.thirdPartyRating)} />
-                <p className="ml-2 text-sm text-gray-500">{product.thirdPartyRating} Third-party rating</p>
-              </div>
-            )}
             
             <div className="mt-8">
               <h2 className="text-lg font-medium text-dark">Description</h2>
