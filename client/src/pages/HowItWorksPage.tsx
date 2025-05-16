@@ -24,7 +24,7 @@ export default function HowItWorksPage() {
                 alt="Business meeting" 
                 className="w-full h-full object-cover" 
               />
-              <div className="absolute inset-0 bg-dark bg-opacity-70"></div>
+              <div className="absolute inset-0 bg-slate-900 bg-opacity-85"></div>
             </div>
             <div className="relative max-w-7xl mx-auto py-24 px-4 sm:py-32 sm:px-6 lg:px-8">
               <h1 className="text-4xl font-extrabold tracking-tight text-white sm:text-5xl lg:text-6xl">How Phoenix Works</h1>
