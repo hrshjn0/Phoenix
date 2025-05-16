@@ -19,7 +19,7 @@ export default function SellersHero() {
           <Button 
             asChild 
             size="lg"
-            className="bg-secondary hover:bg-green-700 text-white"
+            className="bg-gray-700 hover:bg-gray-800 text-white"
           >
             <Link href="/product-questionnaire">
               List Your Product

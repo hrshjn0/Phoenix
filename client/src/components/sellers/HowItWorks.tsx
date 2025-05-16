@@ -49,7 +49,7 @@ export default function HowItWorks() {
             {steps.map((step) => (
               <div key={step.number} className="flex flex-col text-center">
                 <div className="flex-shrink-0 mx-auto">
-                  <div className="flex items-center justify-center h-16 w-16 rounded-full bg-secondary text-white text-xl font-bold">
+                  <div className="flex items-center justify-center h-16 w-16 rounded-full bg-gray-700 text-white text-xl font-bold">
                     {step.number}
                   </div>
                 </div>
@@ -68,7 +68,7 @@ export default function HowItWorks() {
           <Button 
             asChild 
             size="lg"
-            className="bg-secondary text-white hover:bg-green-700"
+            className="bg-gray-700 text-white hover:bg-gray-800"
           >
             <Link href="/product-questionnaire">
               Start Selling Your Product

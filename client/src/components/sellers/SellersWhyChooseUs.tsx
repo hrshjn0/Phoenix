@@ -13,7 +13,7 @@ export default function SellersWhyChooseUs() {
               <div className="flow-root bg-gray-50 rounded-lg px-6 pb-8 h-full">
                 <div className="-mt-6">
                   <div>
-                    <span className="inline-flex items-center justify-center p-3 bg-secondary rounded-md shadow-lg">
+                    <span className="inline-flex items-center justify-center p-3 bg-gray-700 rounded-md shadow-lg">
                       <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                       </svg>
@@ -31,7 +31,7 @@ export default function SellersWhyChooseUs() {
               <div className="flow-root bg-gray-50 rounded-lg px-6 pb-8 h-full">
                 <div className="-mt-6">
                   <div>
-                    <span className="inline-flex items-center justify-center p-3 bg-secondary rounded-md shadow-lg">
+                    <span className="inline-flex items-center justify-center p-3 bg-gray-700 rounded-md shadow-lg">
                       <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
                       </svg>
@@ -49,7 +49,7 @@ export default function SellersWhyChooseUs() {
               <div className="flow-root bg-gray-50 rounded-lg px-6 pb-8 h-full">
                 <div className="-mt-6">
                   <div>
-                    <span className="inline-flex items-center justify-center p-3 bg-secondary rounded-md shadow-lg">
+                    <span className="inline-flex items-center justify-center p-3 bg-gray-700 rounded-md shadow-lg">
                       <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
                       </svg>
