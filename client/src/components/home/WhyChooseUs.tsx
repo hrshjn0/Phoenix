@@ -3,8 +3,8 @@ export default function WhyChooseUs() {
     <div className="py-12 bg-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center">
-          <h2 className="text-3xl font-extrabold text-dark sm:text-4xl">Why Choose Phoenix</h2>
-          <p className="mt-4 text-lg text-gray-500 max-w-2xl mx-auto">Our simple 3-step process connects quality digital products with the right investors, creating value for everyone involved.</p>
+          <h2 className="text-3xl font-extrabold text-dark sm:text-4xl">Find an investor for your Tech Product in 3 easy steps</h2>
+          <p className="mt-4 text-lg text-gray-500 max-w-2xl mx-auto">Our simple process connects quality digital products with the right investors, creating value for everyone involved.</p>
         </div>
 
         <div className="mt-16">

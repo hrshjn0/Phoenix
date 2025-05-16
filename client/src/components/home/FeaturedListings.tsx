@@ -75,7 +75,7 @@ export default function FeaturedListings() {
               </CardContent>
               <CardFooter className="border-t pt-4 mt-auto">
                 <Button asChild className="w-full">
-                  <Link href="/buyers">
+                  <Link href="/login/buyer">
                     View Details
                   </Link>
                 </Button>
@@ -86,7 +86,7 @@ export default function FeaturedListings() {
         
         <div className="mt-12 text-center">
           <Button asChild size="lg" variant="outline">
-            <Link href="/buyers">
+            <Link href="/login/buyer">
               View All Listings
             </Link>
           </Button>
