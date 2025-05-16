@@ -7,10 +7,10 @@ export default function HowItWorksPage() {
   return (
     <>
       <Helmet>
-        <title>How It Works | Phoenix Marketplace</title>
-        <meta name="description" content="Learn how Phoenix Marketplace connects quality digital products with the right investors, creating value for both buyers and sellers." />
-        <meta property="og:title" content="How It Works | Phoenix Marketplace" />
-        <meta property="og:description" content="Learn how Phoenix Marketplace creates value for both buyers and sellers." />
+        <title>How It Works | Phoenix</title>
+        <meta name="description" content="Learn how Phoenix connects tech product owners with the right investors, creating value for both parties." />
+        <meta property="og:title" content="How It Works | Phoenix" />
+        <meta property="og:description" content="Learn how Phoenix creates value for both product owners and investors." />
         <meta property="og:type" content="website" />
       </Helmet>
       <div className="flex flex-col min-h-screen">
@@ -136,7 +136,7 @@ export default function HowItWorksPage() {
                           <div className="ml-4">
                             <h4 className="text-lg leading-6 font-medium text-dark">Browse Listings</h4>
                             <p className="mt-2 text-base text-gray-500">
-                              Explore our curated marketplace of digital products, using filters to find opportunities that match your investment criteria.
+                              Explore our curated platform of tech products, using filters to find opportunities that match your investment criteria.
                             </p>
                           </div>
                         </div>

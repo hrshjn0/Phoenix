@@ -8,10 +8,10 @@ export default function ProductQuestionnairePage() {
   return (
     <>
       <Helmet>
-        <title>List Your Product | Phoenix Marketplace</title>
-        <meta name="description" content="Complete the questionnaire to list your digital product on Phoenix Marketplace. The more information you provide, the better we can showcase your product to potential buyers." />
-        <meta property="og:title" content="List Your Product | Phoenix Marketplace" />
-        <meta property="og:description" content="List your digital product on Phoenix Marketplace." />
+        <title>List Your Product | Phoenix</title>
+        <meta name="description" content="Complete the questionnaire to list your tech product on Phoenix. The more information you provide, the better we can showcase your product to potential investors." />
+        <meta property="og:title" content="List Your Product | Phoenix" />
+        <meta property="og:description" content="List your tech product on Phoenix to connect with investors." />
         <meta property="og:type" content="website" />
       </Helmet>
       <div className="flex flex-col min-h-screen">
