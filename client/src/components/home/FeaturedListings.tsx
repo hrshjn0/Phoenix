@@ -12,8 +12,7 @@ export default function FeaturedListings() {
       description: "Established platform with 5,000+ active users and $250K ARR. Built with React, Node.js and MongoDB.",
       industry: "SaaS",
       ageRange: "3-5 years",
-      revenue: "$250K ARR",
-      askingPrice: "$750K - $950K"
+      revenue: "$250K ARR"
     },
     {
       id: 2,
@@ -21,8 +20,7 @@ export default function FeaturedListings() {
       description: "Profitable online learning platform connecting experts with students. Mobile apps for iOS and Android.",
       industry: "Education",
       ageRange: "5+ years",
-      revenue: "$380K ARR",
-      askingPrice: "$1.2M - $1.5M"
+      revenue: "$380K ARR"
     },
     {
       id: 3,
@@ -30,8 +28,7 @@ export default function FeaturedListings() {
       description: "SaaS tool helping subscription businesses track and optimize customer metrics. Growing 15% MoM.",
       industry: "SaaS",
       ageRange: "1-2 years",
-      revenue: "$120K ARR",
-      askingPrice: "$450K - $550K"
+      revenue: "$120K ARR"
     }
   ];
 
@@ -67,10 +64,7 @@ export default function FeaturedListings() {
                     <p className="text-gray-500">Revenue</p>
                     <p className="font-medium">{listing.revenue}</p>
                   </div>
-                  <div className="col-span-2">
-                    <p className="text-gray-500">Asking Price</p>
-                    <p className="font-medium text-primary">{listing.askingPrice}</p>
-                  </div>
+
                 </div>
               </CardContent>
               <CardFooter className="border-t pt-4 mt-auto">
