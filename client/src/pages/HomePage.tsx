@@ -3,6 +3,7 @@ import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
 import Hero from "@/components/home/Hero";
 import WhyChooseUs from "@/components/home/WhyChooseUs";
+import FeaturedListings from "@/components/home/FeaturedListings";
 import { Helmet } from "react-helmet";
 
 export default function HomePage() {
@@ -20,6 +21,7 @@ export default function HomePage() {
         <main className="flex-grow">
           <Hero />
           <WhyChooseUs />
+          <FeaturedListings />
         </main>
         <Footer />
       </div>
