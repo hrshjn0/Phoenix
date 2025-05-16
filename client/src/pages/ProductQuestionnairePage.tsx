@@ -1,0 +1,38 @@
+import React from "react";
+import Navbar from "@/components/layout/Navbar";
+import Footer from "@/components/layout/Footer";
+import QuestionnaireForm from "@/components/questionnaire/QuestionnaireForm";
+import { Helmet } from "react-helmet";
+
+export default function ProductQuestionnairePage() {
+  return (
+    <>
+      <Helmet>
+        <title>List Your Product | Phoenix Marketplace</title>
+        <meta name="description" content="Complete the questionnaire to list your digital product on Phoenix Marketplace. The more information you provide, the better we can showcase your product to potential buyers." />
+        <meta property="og:title" content="List Your Product | Phoenix Marketplace" />
+        <meta property="og:description" content="List your digital product on Phoenix Marketplace." />
+        <meta property="og:type" content="website" />
+      </Helmet>
+      <div className="flex flex-col min-h-screen">
+        <Navbar />
+        <main className="flex-grow">
+          {/* Questionnaire Header */}
+          <div className="bg-dark">
+            <div className="max-w-7xl mx-auto py-16 px-4 sm:py-24 sm:px-6 lg:px-8">
+              <div className="text-center">
+                <h1 className="text-4xl font-extrabold tracking-tight text-white sm:text-5xl lg:text-6xl">List Your Product</h1>
+                <p className="mt-6 text-xl text-gray-300 max-w-3xl mx-auto">
+                  Complete the questionnaire below to create your product listing. The more information you provide, the better we can showcase your product to potential buyers.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <QuestionnaireForm />
+        </main>
+        <Footer />
+      </div>
+    </>
+  );
+}

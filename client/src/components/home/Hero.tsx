@@ -1,0 +1,48 @@
+import { Link } from "wouter";
+import { Button } from "@/components/ui/button";
+
+export default function Hero() {
+  return (
+    <div className="relative bg-dark">
+      <div className="absolute inset-0">
+        <img 
+          src="https://images.unsplash.com/photo-1519389950473-47ba0277781c?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&h=1080" 
+          alt="Digital marketplace" 
+          className="w-full h-full object-cover" 
+        />
+        <div className="absolute inset-0 bg-dark bg-opacity-70"></div>
+      </div>
+      <div className="relative max-w-7xl mx-auto py-24 px-4 sm:py-32 sm:px-6 lg:px-8">
+        <h1 className="text-4xl font-extrabold tracking-tight text-white sm:text-5xl lg:text-6xl">Phoenix Marketplace</h1>
+        <p className="mt-6 text-xl text-white max-w-3xl">The premier marketplace for buying and selling established digital products and services. Connect with quality investors or find your next opportunity.</p>
+        <div className="mt-10 flex flex-col sm:flex-row gap-4">
+          <Button
+            asChild
+            size="lg"
+            className="w-full sm:w-auto"
+          >
+            <Link href="/buyers">
+              Enter as Investor/Buyer
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 ml-2" viewBox="0 0 20 20" fill="currentColor">
+                <path fillRule="evenodd" d="M10.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L12.586 11H5a1 1 0 110-2h7.586l-2.293-2.293a1 1 0 010-1.414z" clipRule="evenodd" />
+              </svg>
+            </Link>
+          </Button>
+          <Button
+            asChild
+            size="lg"
+            variant="secondary"
+            className="w-full sm:w-auto bg-secondary text-white hover:bg-green-700"
+          >
+            <Link href="/sellers">
+              Enter as Product Owner
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 ml-2" viewBox="0 0 20 20" fill="currentColor">
+                <path fillRule="evenodd" d="M10.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L12.586 11H5a1 1 0 110-2h7.586l-2.293-2.293a1 1 0 010-1.414z" clipRule="evenodd" />
+              </svg>
+            </Link>
+          </Button>
+        </div>
+      </div>
+    </div>
+  );
+}
