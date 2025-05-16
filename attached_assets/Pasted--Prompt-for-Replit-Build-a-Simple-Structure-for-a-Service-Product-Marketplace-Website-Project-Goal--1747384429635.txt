@@ -1,0 +1,75 @@
+
+Prompt for Replit: Build a Simple Structure for a Service Product Marketplace Website
+Project Goal:
+Build the very basic pages and links for a website where companies can sell their old or underperforming digital products to buyers. For this version, we'll skip the actual sign-up and login process. Instead, clicking the buttons on the homepage will just take you directly to the page for buyers or sellers.
+What the Website Needs to Do (Main Parts - Simplified):
+1. Allow entry points for roles: From the homepage, visitors can choose to enter the site as if they were an "Investor/Buyer" or a "Product Owner".
+2. Let sellers list products: There should be a form where Product Owners can describe the product they want to sell.
+3. Let buyers find products: There should be a page where Investors and Buyers can see listed products and search them.
+4. Show product details: Visitors should be able to click on a product listing to see a detailed page about it.
+5. Start conversations (Placeholder): Buyers should have a way to indicate interest in a product, leading to a placeholder for a messaging area.
+6. Show different pages: Create the main pages of the website as described below, connected by links.
+What Information the Website Needs to Remember (Store - Structure Only):
+Even though we aren't building the full login/signup, the website structure should be designed to eventually store information like:
+* User Accounts: Basic details like email, role (buyer/seller), business name. (We won't save real users yet, but the structure should exist).
+* Product Listings: All the details about each product being sold (name, description, financials, tech, etc. - see the questionnaire).
+* Interest/Inquiries: When a buyer shows interest in a product.
+* Messages: Conversations about a product.
+Website Pages - What Each Page Should Look Like and Contain:
+Please create the following pages and make sure the links connect them as described:
+1. Homepage (Main Page):
+    * This is the first page visitors see.
+    * At the very top, have a navigation bar with links to the main sections: "Investors and Buyers", "Product Owners", "How it works", "Contact", and "Login". (The "Login" link in this top bar can just go to either the buyer or seller page for now, or be a placeholder).
+    * Below the navigation, have a large main section (a "Hero banner") for a big image or message.
+    * Include a short sentence or two explaining what the website is about.
+    * IMPORTANT CHANGE: Have two clear buttons or links:
+        * One saying "Enter as Investor/Buyer". Clicking this button should directly take the user to the "Investors and Buyers Page".
+        * One saying "Enter as Product Owner". Clicking this button should directly take the user to the "Product Owners Page".
+    * Include a section explaining "Why choose us".
+
+1. Login Page:
+    * This page is NOT needed for this version. Please skip creating a separate login page and its link from the homepage buttons.
+2. Sign-Up Page:
+    * This page is NOT needed for this version. Please skip creating a sign-up page entirely.
+3. Investors and Buyers Page:
+    * This page is the main area for buyers, accessed directly from the homepage button.
+    * Have a "Hero banner" specific to buyers.
+    * Include a section explaining "Why choose us" for buyers.
+    * Show a visual grid or list of example product listings available. For each listing, display: Industry, some key Features, Age, a short Description, and any "Third-party rating". Each listing should link to its full Product Description page.
+    * Include a section explaining "How it works" specifically for buyers.
+    * Include a section for "FAQs" for buyers.
+    * Placeholder: Add a section titled "Recommended Opportunities" (can be empty for now).
+4. Product Owners Page:
+    * This page is the main area for sellers, accessed directly from the homepage button.
+    * Have a "Hero banner" specific to sellers.
+    * Include a section explaining "Why choose us" for sellers.
+    * Show a visual section that might display examples of listings or a clear button/link encouraging them to "List Your Product". This button should go to the Product Questionnaire page.
+    * Include a section explaining "How it works" specifically for product owners.
+    * Include a section for "FAQs" for product owners.
+5. How it Works Page:
+    * This page explains the overall process for both buyers and sellers.
+6. Contact Page:
+    * This page is for general questions.
+    * Include a form with boxes for Name, Email, Subject, and Message.
+    * Have a button to send the message.
+    * Include example contact info.
+7. Product Questionnaire Page (For Sellers):
+    * This is the form Product Owners fill out to list their product.
+    * It should have the two parts described before (Preliminary and Secondary/Optional) with all the listed boxes and options (Headline, Description, Industry, Age, financials, tech stack, user counts, upload options, etc.).
+    * Have a button to submit the form.
+    * This page should be linked from the "Product Owners Page".
+8. Search Results Page:
+    * This page shows products that match a search query.
+    * Have a title like "Search Results".
+    * Show a grid or list of example products that could match a search.
+    * For each product in the list, show: Headline (link to Product Description), Industry, Features, Age, short Description, Third-party rating.
+    * Include a message for when no results are found.
+9. Product Description Page:
+    * This page shows all the details for one specific product when someone clicks on it from a listing grid.
+    * Display all the information from the Product Questionnaire: Product Name (Headline), Placeholder Logo, Industry, Features (details), Age, Full Description, Total users, Active users, ARR, Active/Inactive status, Third-party rating, Average deal price, IP details, Tech Stack, etc.
+    * Include a button that says "Express Interest" or "Send Inquiry". This button doesn't need to do anything complex yet, just be visible as a placeholder for starting a conversation.
+10. Inquiry/Messaging Page:
+    * This page is a placeholder for where buyers and sellers would talk about a product.
+    * Show the product name they are discussing.
+    * Show a placeholder area for messages.
+    * Have a placeholder box to type a new message and a "Send" button.
