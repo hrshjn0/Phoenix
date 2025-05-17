@@ -5,8 +5,12 @@ import Hero from "@/components/home/Hero";
 import WhyChooseUs from "@/components/home/WhyChooseUs";
 import FeaturedListings from "@/components/home/FeaturedListings";
 import { Helmet } from "react-helmet";
+import { useAuth } from "@/contexts/AuthContext";
 
 export default function HomePage() {
+  const { user, isAuthenticated } = useAuth();
+  const isSeller = isAuthenticated && user?.role === "seller";
+  
   return (
     <>
       <Helmet>
@@ -21,7 +25,7 @@ export default function HomePage() {
         <main className="flex-grow">
           <Hero />
           <WhyChooseUs />
-          <FeaturedListings />
+          {!isSeller && <FeaturedListings />}
         </main>
         <Footer />
       </div>

@@ -55,17 +55,19 @@ export default function Navbar() {
             </div>
             <div className="hidden sm:ml-6 sm:flex sm:space-x-8">
               {navItems.map((item) => (
-                <Link 
-                  key={item.path} 
-                  href={item.path}
-                  className={`${
-                    isActive(item.path)
-                      ? "border-primary text-primary" 
-                      : "border-transparent text-gray-500 hover:border-primary hover:text-primary"
-                  } inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium`}
-                >
-                  {item.name}
-                </Link>
+                !item.restricted && (
+                  <Link 
+                    key={item.path} 
+                    href={item.path}
+                    className={`${
+                      isActive(item.path)
+                        ? "border-primary text-primary" 
+                        : "border-transparent text-gray-500 hover:border-primary hover:text-primary"
+                    } inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium`}
+                  >
+                    {item.name}
+                  </Link>
+                )
               ))}
             </div>
           </div>
@@ -112,12 +114,12 @@ export default function Navbar() {
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end">
                   <DropdownMenuItem asChild>
-                    <Link href="/login?type=buyer" className="flex w-full cursor-pointer">
+                    <Link href="/login?role=buyer" className="flex w-full cursor-pointer">
                       Investor Login
                     </Link>
                   </DropdownMenuItem>
                   <DropdownMenuItem asChild>
-                    <Link href="/login?type=seller" className="flex w-full cursor-pointer">
+                    <Link href="/login?role=seller" className="flex w-full cursor-pointer">
                       Product Owner Login
                     </Link>
                   </DropdownMenuItem>
@@ -188,14 +190,14 @@ export default function Navbar() {
                         Login as:
                       </div>
                       <Link
-                        href="/login?type=buyer"
+                        href="/login?role=buyer"
                         className="block pl-6 pr-4 py-2 border-l-4 border-transparent text-gray-600 hover:bg-gray-50 hover:border-primary hover:text-primary text-base font-medium"
                         onClick={() => setIsOpen(false)}
                       >
                         Investor
                       </Link>
                       <Link
-                        href="/login?type=seller"
+                        href="/login?role=seller"
                         className="block pl-6 pr-4 py-2 border-l-4 border-transparent text-gray-600 hover:bg-gray-50 hover:border-primary hover:text-primary text-base font-medium"
                         onClick={() => setIsOpen(false)}
                       >
