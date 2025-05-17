@@ -23,6 +23,8 @@ export default function ProductListings() {
   });
 
   const handleSearch = () => {
+    if (!searchTerm.trim()) return;
+    
     setIsSearching(true);
     
     // Simulate a brief delay to show the searching feedback
@@ -34,35 +36,50 @@ export default function ProductListings() {
         const nlResults = naturalLanguageSearch(products, searchTerm);
         const explanation = generateSearchExplanation(searchTerm, nlResults);
         setSearchExplanation(explanation);
+        console.log("Natural language search results:", nlResults.length);
+        console.log("Search explanation:", explanation);
       } else {
         setSearchExplanation("");
       }
     }, 800);
   };
 
+  // Apply filters to products
   const filteredProducts = () => {
-    if (!products) return [];
+    if (!products || products.length === 0) {
+      console.log("No products available to filter");
+      return [];
+    }
     
-    // If there's a natural language search term, use it
+    console.log("Filtering products. Search term:", searchTerm, "Has searched:", hasSearched);
+    
+    // If there's a search term and user has clicked search button
     if (searchTerm && hasSearched) {
-      const results = naturalLanguageSearch(products, searchTerm);
+      console.log("Using natural language search");
+      // Use natural language search
+      const nlResults = naturalLanguageSearch(products, searchTerm);
       
-      // Then apply standard filters
-      return results.filter(product => {
+      // Then apply standard filters to the NL results
+      const filtered = nlResults.filter(product => {
         const matchesIndustry = industry === "All Industries" || product.industry === industry;
         const matchesAge = age === "Any Age" || product.age === age;
         return matchesIndustry && matchesAge;
       });
+      
+      console.log("Final filtered results:", filtered.length);
+      return filtered;
     }
     
-    // Otherwise, just apply standard filters
-    return products.filter(product => {
+    // No natural language search, just apply basic filters
+    console.log("Using basic filtering");
+    const filtered = products.filter(product => {
+      // Apply category filters
       const matchesIndustry = industry === "All Industries" || product.industry === industry;
       const matchesAge = age === "Any Age" || product.age === age;
       
-      if (!hasSearched) {
-        // Simple text search when not using natural language
-        const matchesText = searchTerm === "" || 
+      // Add simple text search if user hasn't clicked search button
+      if (searchTerm && !hasSearched) {
+        const matchesText = 
           product.headline.toLowerCase().includes(searchTerm.toLowerCase()) || 
           product.description.toLowerCase().includes(searchTerm.toLowerCase());
         return matchesIndustry && matchesAge && matchesText;
@@ -70,6 +87,9 @@ export default function ProductListings() {
       
       return matchesIndustry && matchesAge;
     });
+    
+    console.log("Final filtered results:", filtered.length);
+    return filtered;
   };
   
   return (

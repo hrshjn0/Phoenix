@@ -116,29 +116,47 @@ function calculateRelevanceScore(product: Product, keyTerms: string[], intents: 
 
 // Main function to search products using natural language
 export function naturalLanguageSearch(products: Product[], query: string): Product[] {
+  // Log inputs for debugging
+  console.log("Natural language search called with query:", query);
+  console.log("Number of products to search:", products.length);
+  
   if (!query || query.trim() === '') {
+    console.log("Empty query - returning all products");
     return products;
   }
   
   const keyTerms = extractKeyTerms(query);
   const intents = detectIntents(query);
   
+  console.log("Extracted key terms:", keyTerms);
+  console.log("Detected intents:", intents);
+  
   // If we couldn't extract meaningful terms or intents, return all products
   if (keyTerms.length === 0 && intents.length === 0) {
+    console.log("No meaningful terms or intents found - returning all products");
     return products;
   }
   
   // Calculate relevance score for each product
-  const scoredProducts = products.map(product => ({
-    product,
-    score: calculateRelevanceScore(product, keyTerms, intents)
-  }));
+  const scoredProducts = products.map(product => {
+    const score = calculateRelevanceScore(product, keyTerms, intents);
+    return {
+      product,
+      score
+    };
+  });
   
   // Sort by relevance score (descending)
   scoredProducts.sort((a, b) => b.score - a.score);
   
   // Filter out irrelevant results (score of 0)
   const relevantProducts = scoredProducts.filter(item => item.score > 0);
+  
+  console.log("Scored products:", scoredProducts.map(p => ({ 
+    title: p.product.headline, 
+    score: p.score 
+  })));
+  console.log("Relevant products found:", relevantProducts.length);
   
   // Return products ordered by relevance
   return relevantProducts.map(item => item.product);
