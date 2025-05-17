@@ -55,17 +55,19 @@ export default function Navbar() {
             </div>
             <div className="hidden sm:ml-6 sm:flex sm:space-x-8">
               {navItems.map((item) => (
-                <Link 
-                  key={item.path} 
-                  href={item.path}
-                  className={`${
-                    isActive(item.path)
-                      ? "border-primary text-primary" 
-                      : "border-transparent text-gray-500 hover:border-primary hover:text-primary"
-                  } inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium`}
-                >
-                  {item.name}
-                </Link>
+                !item.restricted && (
+                  <Link 
+                    key={item.path} 
+                    href={item.path}
+                    className={`${
+                      isActive(item.path)
+                        ? "border-primary text-primary" 
+                        : "border-transparent text-gray-500 hover:border-primary hover:text-primary"
+                    } inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium`}
+                  >
+                    {item.name}
+                  </Link>
+                )
               ))}
             </div>
           </div>
