@@ -69,24 +69,33 @@ export class MemStorage implements IStorage {
     // Create sample seller
     const seller: InsertUser = {
       email: "seller@example.com",
+      password: "$2a$10$CwTycUXWue0Thq9StjUM0uQxTmrjFPTR.QdqjJRMs27c5IZ7NsOP.", // "password123"
       role: "seller",
-      businessName: "Tech Innovations Inc."
+      businessName: "Tech Innovations Inc.",
+      firstName: "John",
+      lastName: "Seller"
     };
     const createdSeller = this.createUser(seller);
     
     // Create another seller for diversity
     const secondSeller: InsertUser = {
       email: "health_tech@example.com",
+      password: "$2a$10$CwTycUXWue0Thq9StjUM0uQxTmrjFPTR.QdqjJRMs27c5IZ7NsOP.", // "password123"
       role: "seller",
-      businessName: "Health Tech Solutions"
+      businessName: "Health Tech Solutions",
+      firstName: "Sarah",
+      lastName: "Health"
     };
     const healthSeller = this.createUser(secondSeller);
     
     // Create a fintech seller
     const fintechSeller: InsertUser = {
       email: "fintech@example.com",
+      password: "$2a$10$CwTycUXWue0Thq9StjUM0uQxTmrjFPTR.QdqjJRMs27c5IZ7NsOP.", // "password123"
       role: "seller",
-      businessName: "FinTech Innovations"
+      businessName: "FinTech Innovations",
+      firstName: "Mike",
+      lastName: "Finance"
     };
     const financeSeller = this.createUser(fintechSeller);
     
@@ -404,7 +413,17 @@ export class MemStorage implements IStorage {
   async createUser(insertUser: InsertUser): Promise<User> {
     const id = this.userIdCounter++;
     const now = new Date();
-    const user: User = { ...insertUser, id, createdAt: now };
+    
+    // Ensure all fields are properly set
+    const user: User = { 
+      ...insertUser, 
+      id, 
+      createdAt: now,
+      businessName: insertUser.businessName || null,
+      firstName: insertUser.firstName || null,
+      lastName: insertUser.lastName || null
+    };
+    
     this.users.set(id, user);
     return user;
   }
@@ -508,4 +527,7 @@ export class MemStorage implements IStorage {
   }
 }
 
-export const storage = new MemStorage();
+import { DatabaseStorage } from "./databaseStorage";
+
+// Use DatabaseStorage for actual database persistence
+export const storage = new DatabaseStorage();

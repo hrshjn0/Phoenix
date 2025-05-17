@@ -3,6 +3,7 @@ import { useLocation } from "wouter";
 import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useMutation } from "@tanstack/react-query";
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -15,13 +16,10 @@ import {
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { useToast } from "@/hooks/use-toast";
+import { apiRequest } from "@/lib/queryClient";
+import { loginUserSchema } from "@shared/schema";
 
-const formSchema = z.object({
-  email: z.string().email({ message: "Please enter a valid email address" }),
-  password: z.string().min(6, { message: "Password must be at least 6 characters" }),
-});
-
-type FormValues = z.infer<typeof formSchema>;
+type FormValues = z.infer<typeof loginUserSchema>;
 
 interface LoginFormProps {
   userType: "buyer" | "seller";
@@ -31,32 +29,38 @@ interface LoginFormProps {
 export default function LoginForm({ userType, onLoginSuccess }: LoginFormProps) {
   const [, navigate] = useLocation();
   const { toast } = useToast();
-  const [isLoading, setIsLoading] = useState(false);
+  const [authError, setAuthError] = useState<string | null>(null);
 
   const form = useForm<FormValues>({
-    resolver: zodResolver(formSchema),
+    resolver: zodResolver(loginUserSchema),
     defaultValues: {
       email: "",
       password: "",
     },
   });
 
-  function onSubmit(values: FormValues) {
-    // This is a mock login, so we'll just simulate a successful login
-    setIsLoading(true);
-    
-    // Simulate API call
-    setTimeout(() => {
-      setIsLoading(false);
+  const loginMutation = useMutation({
+    mutationFn: async (data: FormValues) => {
+      return apiRequest('/api/auth/login', {
+        method: 'POST',
+        body: JSON.stringify(data),
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+    },
+    onSuccess: (data) => {
+      // Store token in localStorage
+      localStorage.setItem('authToken', data.token);
       
       // Show success toast
       toast({
         title: "Login Successful",
-        description: `Welcome back, ${values.email}!`,
+        description: `Welcome back, ${data.user.email}!`,
       });
       
-      // Redirect to appropriate page based on user type
-      if (userType === "buyer") {
+      // Redirect to appropriate page based on user type and role
+      if (data.user.role === "buyer") {
         navigate("/buyers");
       } else {
         navigate("/sellers");
@@ -65,7 +69,20 @@ export default function LoginForm({ userType, onLoginSuccess }: LoginFormProps) 
       if (onLoginSuccess) {
         onLoginSuccess();
       }
-    }, 1000);
+    },
+    onError: (error: any) => {
+      setAuthError(error?.message || "Login failed. Please check your credentials.");
+      toast({
+        title: "Login Failed",
+        description: error?.message || "Login failed. Please check your credentials.",
+        variant: "destructive",
+      });
+    },
+  });
+
+  function onSubmit(values: FormValues) {
+    setAuthError(null);
+    loginMutation.mutate(values);
   }
 
   return (
@@ -81,6 +98,11 @@ export default function LoginForm({ userType, onLoginSuccess }: LoginFormProps) 
         </CardDescription>
       </CardHeader>
       <CardContent>
+        {authError && (
+          <div className="mb-4 p-3 bg-red-50 border border-red-200 text-red-600 rounded-md text-sm">
+            {authError}
+          </div>
+        )}
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
             <FormField
@@ -109,15 +131,15 @@ export default function LoginForm({ userType, onLoginSuccess }: LoginFormProps) 
                 </FormItem>
               )}
             />
-            <Button type="submit" className="w-full" disabled={isLoading}>
-              {isLoading ? "Logging in..." : "Login"}
+            <Button type="submit" className="w-full" disabled={loginMutation.isPending}>
+              {loginMutation.isPending ? "Logging in..." : "Login"}
             </Button>
           </form>
         </Form>
       </CardContent>
       <CardFooter className="flex flex-col space-y-2 border-t pt-4">
         <div className="text-sm text-gray-500 text-center">
-          Don't have an account? <span className="text-primary cursor-pointer hover:underline">Register</span>
+          Don't have an account? <span className="text-primary cursor-pointer hover:underline" onClick={() => navigate(`/register?type=${userType}`)}>Register</span>
         </div>
         <div className="text-sm text-primary cursor-pointer hover:underline text-center">
           Forgot password?
