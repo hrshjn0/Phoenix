@@ -3,8 +3,19 @@ import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
 import QuestionnaireForm from "@/components/questionnaire/QuestionnaireForm";
 import { Helmet } from "react-helmet";
+import { useRoleBasedAccess } from "@/lib/roleBasedAccess";
+import { useAuth } from "@/contexts/AuthContext";
 
 export default function ProductQuestionnairePage() {
+  // Only allow sellers/product owners to access this page, redirect others to home
+  const { isAuthorized } = useRoleBasedAccess(['seller']);
+  const { isLoading } = useAuth();
+  
+  // If still loading or not authorized, show minimal content
+  if (isLoading || !isAuthorized) {
+    return null; // Will be redirected by the hook
+  }
+  
   return (
     <>
       <Helmet>

@@ -6,14 +6,25 @@ import BuyersWhyChooseUs from "@/components/buyers/BuyersWhyChooseUs";
 import ProductListings from "@/components/buyers/ProductListings";
 import BuyersFAQ from "@/components/buyers/BuyersFAQ";
 import { Helmet } from "react-helmet";
+import { useRoleBasedAccess } from "@/lib/roleBasedAccess";
+import { useAuth } from "@/contexts/AuthContext";
 
 export default function BuyersPage() {
+  // Only allow buyers to access this page, redirect others to home
+  const { isAuthorized } = useRoleBasedAccess(['buyer']);
+  const { isLoading } = useAuth();
+  
+  // If still loading or not authorized, show minimal content
+  if (isLoading || !isAuthorized) {
+    return null; // Will be redirected by the hook
+  }
+
   return (
     <>
       <Helmet>
-        <title>For Investors & Buyers | Phoenix Marketplace</title>
-        <meta name="description" content="Discover vetted digital products with proven track records. Find your next investment opportunity from our curated marketplace." />
-        <meta property="og:title" content="For Investors & Buyers | Phoenix Marketplace" />
+        <title>For Investors & Buyers | Phoenix</title>
+        <meta name="description" content="Discover vetted digital products with proven track records. Find your next investment opportunity from our curated platform." />
+        <meta property="og:title" content="For Investors & Buyers | Phoenix" />
         <meta property="og:description" content="Discover vetted digital products with proven track records." />
         <meta property="og:type" content="website" />
       </Helmet>
@@ -32,7 +43,7 @@ export default function BuyersPage() {
               </div>
 
               <div className="mt-8 text-center text-gray-500">
-                <p>Login to see personalized recommendations based on your interests.</p>
+                <p>Personalized recommendations will appear here based on your browsing.</p>
               </div>
             </div>
           </div>
