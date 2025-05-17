@@ -7,6 +7,7 @@ import { useLocation } from "wouter";
 import { useQuery } from "@tanstack/react-query";
 import { Product } from "@shared/schema";
 import { Helmet } from "react-helmet";
+import { naturalLanguageSearch, generateSearchExplanation } from "@/lib/naturalLanguageSearch";
 
 export default function SearchResultsPage() {
   const [location] = useLocation();
@@ -16,6 +17,7 @@ export default function SearchResultsPage() {
   const [industry, setIndustry] = useState(queryParams.get('industry') || 'All Industries');
   const [age, setAge] = useState(queryParams.get('age') || 'Any Age');
   const [revenue, setRevenue] = useState(queryParams.get('revenue') || 'Any Revenue');
+  const [searchExplanation, setSearchExplanation] = useState('');
   
   const { data: products, isLoading, error } = useQuery<Product[]>({
     queryKey: ['/api/products'],
@@ -40,14 +42,30 @@ export default function SearchResultsPage() {
     }
   };
 
+  // Generate search explanation when search query or products change
+  React.useEffect(() => {
+    if (searchQuery && products) {
+      const searchResults = naturalLanguageSearch(products, searchQuery);
+      const explanation = generateSearchExplanation(searchQuery, searchResults);
+      setSearchExplanation(explanation);
+    } else {
+      setSearchExplanation('');
+    }
+  }, [searchQuery, products]);
+  
   const filteredProducts = () => {
     if (!products) return [];
     
-    return products.filter(product => {
-      const matchesSearchQuery = !searchQuery || 
-        product.headline.toLowerCase().includes(searchQuery.toLowerCase()) || 
-        product.description.toLowerCase().includes(searchQuery.toLowerCase());
-        
+    // First, apply natural language search if query exists
+    let results = products;
+    
+    if (searchQuery) {
+      // Use natural language search for more intelligent matching
+      results = naturalLanguageSearch(products, searchQuery);
+    }
+    
+    // Then apply traditional filters
+    return results.filter(product => {
       const matchesIndustry = industry === 'All Industries' || product.industry === industry;
       const matchesAge = age === 'Any Age' || product.age === age;
       
@@ -58,7 +76,7 @@ export default function SearchResultsPage() {
         (revenue === '$250K-1M ARR' && product.arr && parseInt(product.arr.replace(/[^\d]/g, '')) > 250000 && parseInt(product.arr.replace(/[^\d]/g, '')) <= 1000000) ||
         (revenue === '$1M+ ARR' && product.arr && parseInt(product.arr.replace(/[^\d]/g, '')) > 1000000);
       
-      return matchesSearchQuery && matchesIndustry && matchesAge && matchesRevenue;
+      return matchesIndustry && matchesAge && matchesRevenue;
     });
   };
 
@@ -82,6 +100,11 @@ export default function SearchResultsPage() {
                 {searchQuery && (
                   <p className="mt-6 text-xl text-gray-300 max-w-3xl mx-auto">
                     Showing results for: <span className="font-semibold text-white">"{searchQuery}"</span>
+                  </p>
+                )}
+                {searchExplanation && (
+                  <p className="mt-3 text-md text-gray-400 max-w-3xl mx-auto">
+                    {searchExplanation}
                   </p>
                 )}
               </div>
