@@ -12,6 +12,7 @@ import SearchResultsPage from "@/pages/SearchResultsPage";
 import ProductDetailPage from "@/pages/ProductDetailPage";
 import MessagingPage from "@/pages/MessagingPage";
 import LoginPage from "@/pages/LoginPage";
+import RegisterPage from "@/pages/RegisterPage";
 import { ThemeProvider } from "next-themes";
 
 function App() {
@@ -31,6 +32,8 @@ function App() {
           <Route path="/messaging/:id" component={MessagingPage} />
           <Route path="/login/buyer" component={LoginPage} />
           <Route path="/login/seller" component={LoginPage} />
+          <Route path="/register/buyer" component={RegisterPage} />
+          <Route path="/register/seller" component={RegisterPage} />
           <Route component={NotFound} />
         </Switch>
       </TooltipProvider>

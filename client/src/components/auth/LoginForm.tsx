@@ -44,9 +44,6 @@ export default function LoginForm({ userType, onLoginSuccess }: LoginFormProps) 
       return apiRequest('/api/auth/login', {
         method: 'POST',
         body: JSON.stringify(data),
-        headers: {
-          'Content-Type': 'application/json',
-        },
       });
     },
     onSuccess: (data) => {
