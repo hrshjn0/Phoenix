@@ -6,9 +6,31 @@ import { z } from "zod";
 export const users = pgTable("users", {
   id: serial("id").primaryKey(),
   email: text("email").notNull().unique(),
+  password: text("password").notNull(),
   role: text("role").notNull(), // "buyer" or "seller"
   businessName: text("business_name"),
+  firstName: text("first_name"),
+  lastName: text("last_name"),
   createdAt: timestamp("created_at").defaultNow().notNull(),
+});
+
+// For registering a new user
+export const registerUserSchema = z.object({
+  email: z.string().email({ message: "Please enter a valid email address" }),
+  password: z.string().min(6, { message: "Password must be at least 6 characters" }),
+  role: z.enum(["buyer", "seller"], { 
+    required_error: "Please select a role",
+    invalid_type_error: "Role must be either buyer or seller",
+  }),
+  businessName: z.string().optional(),
+  firstName: z.string().min(1, "First name is required").optional(),
+  lastName: z.string().min(1, "Last name is required").optional(),
+});
+
+// For logging in
+export const loginUserSchema = z.object({
+  email: z.string().email({ message: "Please enter a valid email address" }),
+  password: z.string().min(1, { message: "Password is required" }),
 });
 
 export const insertUserSchema = createInsertSchema(users).omit({
