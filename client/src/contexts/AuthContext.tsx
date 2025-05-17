@@ -61,14 +61,33 @@ export const AuthProvider = ({ children }: AuthProviderProps) => {
     staleTime: 300000, // 5 minutes
   });
 
+  // Set up an event listener to detect changes to authToken in localStorage
   useEffect(() => {
+    const handleStorageChange = () => {
+      // When authToken changes, refresh the user data
+      refetch();
+    };
+
+    // Check for login state when initialized
     setIsInitialized(true);
-  }, []);
+
+    // Listen for changes to localStorage
+    window.addEventListener('storage', handleStorageChange);
+    
+    // Custom event for same-tab updates
+    window.addEventListener('auth-changed', handleStorageChange);
+    
+    return () => {
+      window.removeEventListener('storage', handleStorageChange);
+      window.removeEventListener('auth-changed', handleStorageChange);
+    };
+  }, [refetch]);
 
   const logout = () => {
     localStorage.removeItem("authToken");
     queryClient.invalidateQueries({ queryKey: ["/api/auth/me"] });
-    window.location.href = "/";
+    // Manually refetch to update state immediately
+    refetch();
   };
 
   const value = {

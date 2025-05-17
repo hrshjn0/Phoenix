@@ -50,6 +50,9 @@ export default function LoginForm({ userType, onLoginSuccess }: LoginFormProps) 
       // Store token in localStorage
       localStorage.setItem('authToken', data.token);
       
+      // Dispatch event to notify AuthContext of the change
+      window.dispatchEvent(new Event('auth-changed'));
+      
       // Show success toast
       toast({
         title: "Login Successful",

@@ -65,6 +65,9 @@ export default function RegisterForm({ initialUserType = "buyer", onRegisterSucc
       // Store token in localStorage
       localStorage.setItem('authToken', data.token);
       
+      // Dispatch event to notify AuthContext of the change
+      window.dispatchEvent(new Event('auth-changed'));
+      
       // Show success toast
       toast({
         title: "Registration Successful",
