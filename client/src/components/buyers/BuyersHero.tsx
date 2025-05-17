@@ -17,12 +17,12 @@ export default function BuyersHero() {
         <p className="mt-6 text-xl text-gray-200 max-w-3xl">Accelerate your portfolio with vetted tech-enabled products ready to scale with strategic investment.</p>
         <div className="mt-10">
           <Button asChild size="lg">
-            <Link href="/search">
+            <a href="#available-products">
               Browse Products
               <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 ml-2" viewBox="0 0 20 20" fill="currentColor">
                 <path fillRule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clipRule="evenodd" />
               </svg>
-            </Link>
+            </a>
           </Button>
         </div>
       </div>

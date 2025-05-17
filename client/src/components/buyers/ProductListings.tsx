@@ -73,7 +73,7 @@ export default function ProductListings() {
   };
   
   return (
-    <div className="py-12 bg-gray-50">
+    <div id="available-products" className="py-12 bg-gray-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-6">
           <h2 className="text-3xl font-extrabold text-dark sm:text-4xl">Available Products</h2>
