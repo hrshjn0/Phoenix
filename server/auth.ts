@@ -27,7 +27,7 @@ export function generateToken(userId: number, email: string, role: string): stri
   return jwt.sign(
     { id: userId, email, role },
     JWT_SECRET,
-    { expiresIn: '7d' }
+    { expiresIn: '5m' } // Changed from 7 days to 5 minutes
   );
 }
 
