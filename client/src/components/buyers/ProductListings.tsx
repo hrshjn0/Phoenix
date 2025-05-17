@@ -2,48 +2,146 @@ import { useState, useEffect } from "react";
 import { Link } from "wouter";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectTrigger, SelectContent, SelectItem, SelectValue } from "@/components/ui/select";
 import { Card, CardContent } from "@/components/ui/card";
-import { Search } from "lucide-react";
+import { Search, Filter, Loader2 } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
 import { Product } from "@shared/schema";
+import { naturalLanguageSearch, generateSearchExplanation } from "@/lib/naturalLanguageSearch";
 
 export default function ProductListings() {
   const [industry, setIndustry] = useState<string>("All Industries");
   const [age, setAge] = useState<string>("Any Age");
   const [searchTerm, setSearchTerm] = useState<string>("");
+  const [isSearching, setIsSearching] = useState<boolean>(false);
+  const [searchExplanation, setSearchExplanation] = useState<string>("");
+  const [hasSearched, setHasSearched] = useState<boolean>(false);
   
   const { data: products, isLoading, error } = useQuery<Product[]>({
     queryKey: ['/api/products'],
   });
 
+  const handleSearch = () => {
+    setIsSearching(true);
+    
+    // Simulate a brief delay to show the searching feedback
+    setTimeout(() => {
+      setIsSearching(false);
+      setHasSearched(true);
+      
+      if (products && searchTerm) {
+        const nlResults = naturalLanguageSearch(products, searchTerm);
+        const explanation = generateSearchExplanation(searchTerm, nlResults);
+        setSearchExplanation(explanation);
+      } else {
+        setSearchExplanation("");
+      }
+    }, 800);
+  };
+
   const filteredProducts = () => {
     if (!products) return [];
     
+    // If there's a natural language search term, use it
+    if (searchTerm && hasSearched) {
+      const results = naturalLanguageSearch(products, searchTerm);
+      
+      // Then apply standard filters
+      return results.filter(product => {
+        const matchesIndustry = industry === "All Industries" || product.industry === industry;
+        const matchesAge = age === "Any Age" || product.age === age;
+        return matchesIndustry && matchesAge;
+      });
+    }
+    
+    // Otherwise, just apply standard filters
     return products.filter(product => {
-      const matchesSearchTerm = searchTerm === "" || 
-        product.headline.toLowerCase().includes(searchTerm.toLowerCase()) || 
-        product.description.toLowerCase().includes(searchTerm.toLowerCase());
-        
       const matchesIndustry = industry === "All Industries" || product.industry === industry;
       const matchesAge = age === "Any Age" || product.age === age;
       
-      return matchesSearchTerm && matchesIndustry && matchesAge;
+      if (!hasSearched) {
+        // Simple text search when not using natural language
+        const matchesText = searchTerm === "" || 
+          product.headline.toLowerCase().includes(searchTerm.toLowerCase()) || 
+          product.description.toLowerCase().includes(searchTerm.toLowerCase());
+        return matchesIndustry && matchesAge && matchesText;
+      }
+      
+      return matchesIndustry && matchesAge;
     });
   };
   
   return (
     <div className="py-12 bg-gray-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center">
+        <div className="text-center mb-6">
           <h2 className="text-3xl font-extrabold text-dark sm:text-4xl">Available Products</h2>
-          <p className="mt-4 text-lg text-gray-500 max-w-2xl mx-auto">Browse our curated selection of digital products for sale.</p>
+          <p className="mt-4 text-lg text-gray-500 max-w-2xl mx-auto">Browse our curated selection of tech products for investment.</p>
         </div>
+        
+        {/* Natural Language Search */}
+        <Card className="mb-6 shadow-md">
+          <CardContent className="pt-6">
+            <div className="space-y-4">
+              <div className="flex items-center gap-2">
+                <Search className="h-5 w-5 text-primary" />
+                <h3 className="text-lg font-medium text-dark">Describe your investment interests</h3>
+              </div>
+              
+              <p className="text-gray-500 text-sm">
+                Tell us in your own words what type of tech product you're looking to invest in.
+              </p>
+              
+              <Textarea 
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                placeholder="Example: I'm looking for a SaaS product with good revenue growth, at least 2 years in the market, and strong customer retention."
+                className="min-h-[100px]"
+              />
+              
+              <div className="flex justify-between items-center">
+                <div className="text-xs text-gray-500">
+                  <p>Try: "Profitable e-commerce business" or "Mobile app with 10K+ users"</p>
+                </div>
+                
+                <Button 
+                  onClick={handleSearch}
+                  className="bg-primary hover:bg-primary/90"
+                  disabled={isSearching || searchTerm.trim().length === 0}
+                >
+                  {isSearching ? (
+                    <>
+                      <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                      Searching...
+                    </>
+                  ) : (
+                    <>
+                      <Search className="mr-2 h-4 w-4" />
+                      Find Products
+                    </>
+                  )}
+                </Button>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+        
+        {/* Search explanation */}
+        {searchExplanation && hasSearched && (
+          <div className="bg-blue-50 border border-blue-100 rounded-lg p-4 mb-6">
+            <p className="text-blue-800 text-sm">{searchExplanation}</p>
+          </div>
+        )}
 
-        {/* Product filter bar */}
-        <div className="mt-8 flex flex-col sm:flex-row justify-between items-center bg-white p-4 rounded-lg shadow-sm">
-          <div className="flex items-center space-x-4 mb-4 sm:mb-0">
-            <span className="text-sm text-gray-500">Filter by:</span>
+        {/* Filter bar */}
+        <div className="mb-6 flex flex-col sm:flex-row justify-start items-center gap-4 bg-white p-4 rounded-lg shadow-sm">
+          <div className="flex items-center gap-2">
+            <Filter className="h-4 w-4 text-gray-500" />
+            <span className="text-sm font-medium text-gray-700">Refine by:</span>
+          </div>
+          
+          <div className="flex flex-wrap gap-4">
             <Select value={industry} onValueChange={setIndustry}>
               <SelectTrigger className="w-[180px]">
                 <SelectValue placeholder="All Industries" />
@@ -69,21 +167,6 @@ export default function ProductListings() {
                 <SelectItem value="5+ years">5+ Years</SelectItem>
               </SelectContent>
             </Select>
-          </div>
-          
-          <div className="w-full sm:w-auto">
-            <div className="relative rounded-md shadow-sm">
-              <Input
-                type="text"
-                placeholder="Search products..."
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                className="sm:w-64"
-              />
-              <div className="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
-                <Search className="h-4 w-4 text-gray-400" />
-              </div>
-            </div>
           </div>
         </div>
 
