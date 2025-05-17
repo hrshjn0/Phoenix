@@ -9,7 +9,7 @@ export default function RegisterPage() {
   
   // Get the user type from query parameter
   const params = new URLSearchParams(window.location.search);
-  const userType = params.get("type") === "seller" ? "seller" : "buyer";
+  const userType = params.get("role") === "seller" ? "seller" : "buyer";
 
   return (
     <>
