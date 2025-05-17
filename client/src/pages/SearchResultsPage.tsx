@@ -50,18 +50,21 @@ export default function SearchResultsPage() {
     }
   };
   
-  // Apply natural language processing when search query or products change
-  useEffect(() => {
-    if (searchQuery && products.length > 0) {
-      // Get the natural language search results
-      const nlResults = naturalLanguageSearch(products, searchQuery);
-      // Generate explanation for this search
-      const explanation = generateSearchExplanation(searchQuery, nlResults);
+  // State for search process
+  const [isSearching, setIsSearching] = useState(false);
+  const [hasSearched, setHasSearched] = useState(false);
+
+  // Generate explanation when search happens
+  const updateSearchExplanation = (query: string) => {
+    if (query && products && products.length > 0) {
+      const nlResults = naturalLanguageSearch(products, query);
+      const explanation = generateSearchExplanation(query, nlResults);
       setSearchExplanation(explanation);
+      setHasSearched(true);
     } else {
       setSearchExplanation('');
     }
-  }, [searchQuery, products]);
+  };
   
   // Memoize the filtered products to avoid recalculation on every render
   const filteredProducts = useMemo(() => {
@@ -139,8 +142,18 @@ export default function SearchResultsPage() {
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
             <NaturalLanguageSearch 
               initialQuery={searchQuery}
-              onSearch={(query) => handleFilterChange("query", query)}
+              onSearch={(query) => {
+                handleFilterChange("query", query);
+                updateSearchExplanation(query);
+              }}
             />
+            
+            {/* Search explanation */}
+            {searchExplanation && hasSearched && (
+              <div className="bg-blue-50 border border-blue-100 rounded-lg p-4 mb-6">
+                <p className="text-blue-800 text-sm">{searchExplanation}</p>
+              </div>
+            )}
             
             <SearchFilters 
               searchQuery={searchQuery}
