@@ -83,7 +83,12 @@ export default function LoginForm({ userType, onLoginSuccess }: LoginFormProps) 
 
   function onSubmit(values: FormValues) {
     setAuthError(null);
-    loginMutation.mutate(values);
+    // Ensure that the role is always included in the form submission
+    const dataWithRole = {
+      ...values,
+      role: userType
+    };
+    loginMutation.mutate(dataWithRole);
   }
 
   return (
@@ -129,6 +134,18 @@ export default function LoginForm({ userType, onLoginSuccess }: LoginFormProps) 
                     <Input type="password" placeholder="******" {...field} />
                   </FormControl>
                   <FormMessage />
+                </FormItem>
+              )}
+            />
+            {/* Hidden field for role */}
+            <FormField
+              control={form.control}
+              name="role"
+              render={({ field }) => (
+                <FormItem className="hidden">
+                  <FormControl>
+                    <Input type="hidden" {...field} value={userType} />
+                  </FormControl>
                 </FormItem>
               )}
             />
