@@ -145,7 +145,10 @@ export async function login(req: Request, res: Response) {
     // Validate request body
     const validationResult = loginUserSchema.safeParse(req.body);
     
+    console.log("Login attempt with body:", JSON.stringify(req.body));
+    
     if (!validationResult.success) {
+      console.log("Validation failed:", validationResult.error.errors);
       return res.status(400).json({ 
         message: 'Validation failed', 
         errors: validationResult.error.errors 
@@ -153,23 +156,29 @@ export async function login(req: Request, res: Response) {
     }
     
     const { email, password, role } = validationResult.data;
+    console.log("Validated data:", { email, hasPassword: !!password, role });
     
     // Find user
     const user = await storage.getUserByEmail(email);
     
     if (!user) {
+      console.log("User not found for email:", email);
       return res.status(400).json({ message: 'Invalid email or password' });
     }
+    
+    console.log("User found:", { userId: user.id, userEmail: user.email, userRole: user.role });
     
     // Compare password
     const isPasswordValid = await comparePassword(password, user.password);
     
     if (!isPasswordValid) {
+      console.log("Password validation failed for user:", user.id);
       return res.status(400).json({ message: 'Invalid email or password' });
     }
     
     // Verify role if provided
     if (role && user.role !== role) {
+      console.log("Role mismatch:", { providedRole: role, userRole: user.role });
       return res.status(403).json({ 
         message: 'You are not authorized to log in with this account type' 
       });
@@ -180,6 +189,8 @@ export async function login(req: Request, res: Response) {
     
     // Return response (excluding password)
     const { password: _, ...userWithoutPassword } = user;
+    
+    console.log("Login successful for:", { userId: user.id, userRole: user.role });
     
     res.json({
       message: 'Login successful',
