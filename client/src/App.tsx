@@ -35,10 +35,8 @@ function App() {
               <Route path="/search" component={SearchResultsPage} />
               <Route path="/product/:id" component={ProductDetailPage} />
               <Route path="/messaging/:id" component={MessagingPage} />
-              <Route path="/login/buyer" component={LoginPage} />
-              <Route path="/login/seller" component={LoginPage} />
-              <Route path="/register/buyer" component={RegisterPage} />
-              <Route path="/register/seller" component={RegisterPage} />
+              <Route path="/login" component={LoginPage} />
+              <Route path="/register" component={RegisterPage} />
               <Route component={NotFound} />
             </Switch>
           </TooltipProvider>

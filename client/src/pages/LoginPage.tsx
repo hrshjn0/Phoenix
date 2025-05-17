@@ -7,7 +7,10 @@ import { Helmet } from "react-helmet";
 
 export default function LoginPage() {
   const [location] = useLocation();
-  const userType = location.includes("seller") ? "seller" : "buyer";
+  
+  // Get the user type from query parameter
+  const params = new URLSearchParams(window.location.search);
+  const userType = params.get("type") === "seller" ? "seller" : "buyer";
 
   return (
     <>

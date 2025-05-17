@@ -112,13 +112,13 @@ export default function Navbar() {
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end">
                   <DropdownMenuItem asChild>
-                    <Link href="/login/buyer" className="flex w-full cursor-pointer">
+                    <Link href="/login?type=buyer" className="flex w-full cursor-pointer">
                       Investor Login
                     </Link>
                   </DropdownMenuItem>
                   <DropdownMenuItem asChild>
-                    <Link href="/login/seller" className="flex w-full cursor-pointer">
-                      Owner Login
+                    <Link href="/login?type=seller" className="flex w-full cursor-pointer">
+                      Product Owner Login
                     </Link>
                   </DropdownMenuItem>
                 </DropdownMenuContent>
@@ -188,14 +188,14 @@ export default function Navbar() {
                         Login as:
                       </div>
                       <Link
-                        href="/login/buyer"
+                        href="/login?type=buyer"
                         className="block pl-6 pr-4 py-2 border-l-4 border-transparent text-gray-600 hover:bg-gray-50 hover:border-primary hover:text-primary text-base font-medium"
                         onClick={() => setIsOpen(false)}
                       >
                         Investor
                       </Link>
                       <Link
-                        href="/login/seller"
+                        href="/login?type=seller"
                         className="block pl-6 pr-4 py-2 border-l-4 border-transparent text-gray-600 hover:bg-gray-50 hover:border-primary hover:text-primary text-base font-medium"
                         onClick={() => setIsOpen(false)}
                       >
