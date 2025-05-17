@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Link } from "wouter";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -11,19 +11,27 @@ import { Product } from "@shared/schema";
 import { naturalLanguageSearch, generateSearchExplanation } from "@/lib/naturalLanguageSearch";
 
 export default function ProductListings() {
+  // Filter states
   const [industry, setIndustry] = useState<string>("All Industries");
   const [age, setAge] = useState<string>("Any Age");
-  const [searchTerm, setSearchTerm] = useState<string>("");
-  const [isSearching, setIsSearching] = useState<boolean>(false);
-  const [searchExplanation, setSearchExplanation] = useState<string>("");
-  const [hasSearched, setHasSearched] = useState<boolean>(false);
   
-  const { data: products, isLoading, error } = useQuery<Product[]>({
+  // Natural language search states
+  const [nlSearchTerm, setNlSearchTerm] = useState<string>("");
+  const [isSearching, setIsSearching] = useState<boolean>(false);
+  const [hasSearched, setHasSearched] = useState<boolean>(false);
+  const [searchExplanation, setSearchExplanation] = useState<string>("");
+  
+  // Quick search state (updates in real time)
+  const [quickSearchTerm, setQuickSearchTerm] = useState<string>("");
+  
+  // Product data
+  const { data: products = [], isLoading, error } = useQuery<Product[]>({
     queryKey: ['/api/products'],
   });
 
-  const handleSearch = () => {
-    if (!searchTerm.trim()) return;
+  // Handle natural language search button click
+  const handleNaturalLanguageSearch = () => {
+    if (!nlSearchTerm.trim()) return;
     
     setIsSearching(true);
     
@@ -32,64 +40,70 @@ export default function ProductListings() {
       setIsSearching(false);
       setHasSearched(true);
       
-      if (products && searchTerm) {
-        const nlResults = naturalLanguageSearch(products, searchTerm);
-        const explanation = generateSearchExplanation(searchTerm, nlResults);
+      if (products && nlSearchTerm) {
+        const nlResults = naturalLanguageSearch(products, nlSearchTerm);
+        const explanation = generateSearchExplanation(nlSearchTerm, nlResults);
         setSearchExplanation(explanation);
-        console.log("Natural language search results:", nlResults.length);
-        console.log("Search explanation:", explanation);
       } else {
         setSearchExplanation("");
       }
     }, 800);
   };
 
+  // Clear all filters and searches
+  const clearAllFilters = () => {
+    setNlSearchTerm("");
+    setQuickSearchTerm("");
+    setIndustry("All Industries");
+    setAge("Any Age");
+    setHasSearched(false);
+    setSearchExplanation("");
+  };
+
   // Apply filters to products
   const filteredProducts = () => {
     if (!products || products.length === 0) {
-      console.log("No products available to filter");
       return [];
     }
     
-    console.log("Filtering products. Search term:", searchTerm, "Has searched:", hasSearched);
-    
-    // If there's a search term and user has clicked search button
-    if (searchTerm && hasSearched) {
-      console.log("Using natural language search");
-      // Use natural language search
-      const nlResults = naturalLanguageSearch(products, searchTerm);
+    // If user has performed natural language search
+    if (hasSearched && nlSearchTerm.trim()) {
+      // Use natural language search results
+      const nlResults = naturalLanguageSearch(products, nlSearchTerm);
       
-      // Then apply standard filters to the NL results
-      const filtered = nlResults.filter(product => {
+      // Apply standard filters and quick search to the NL results
+      return nlResults.filter(product => {
         const matchesIndustry = industry === "All Industries" || product.industry === industry;
         const matchesAge = age === "Any Age" || product.age === age;
+        
+        // Apply quick search if entered
+        if (quickSearchTerm) {
+          const matchesQuickSearch = 
+            product.headline.toLowerCase().includes(quickSearchTerm.toLowerCase()) || 
+            product.description.toLowerCase().includes(quickSearchTerm.toLowerCase());
+          return matchesIndustry && matchesAge && matchesQuickSearch;
+        }
+        
         return matchesIndustry && matchesAge;
       });
-      
-      console.log("Final filtered results:", filtered.length);
-      return filtered;
     }
     
-    // No natural language search, just apply basic filters
-    console.log("Using basic filtering");
-    const filtered = products.filter(product => {
+    // Regular filtering with quick search and category filters
+    return products.filter(product => {
       // Apply category filters
       const matchesIndustry = industry === "All Industries" || product.industry === industry;
       const matchesAge = age === "Any Age" || product.age === age;
       
-      // Add simple text search if user hasn't clicked search button
-      if (searchTerm && !hasSearched) {
-        const matchesText = 
-          product.headline.toLowerCase().includes(searchTerm.toLowerCase()) || 
-          product.description.toLowerCase().includes(searchTerm.toLowerCase());
-        return matchesIndustry && matchesAge && matchesText;
+      // Apply quick search if user has entered one
+      if (quickSearchTerm) {
+        const matchesQuickSearch = 
+          product.headline.toLowerCase().includes(quickSearchTerm.toLowerCase()) || 
+          product.description.toLowerCase().includes(quickSearchTerm.toLowerCase());
+        return matchesIndustry && matchesAge && matchesQuickSearch;
       }
       
       return matchesIndustry && matchesAge;
     });
-    
-    console.log("Final filtered results:", filtered.length);
-    return filtered;
   };
   
   return (
@@ -114,8 +128,8 @@ export default function ProductListings() {
               </p>
               
               <Textarea 
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
+                value={nlSearchTerm}
+                onChange={(e) => setNlSearchTerm(e.target.value)}
                 placeholder="Example: I'm looking for a SaaS product with good revenue growth, at least 2 years in the market, and strong customer retention."
                 className="min-h-[100px]"
               />
@@ -126,9 +140,9 @@ export default function ProductListings() {
                 </div>
                 
                 <Button 
-                  onClick={handleSearch}
+                  onClick={handleNaturalLanguageSearch}
                   className="bg-primary hover:bg-primary/90"
-                  disabled={isSearching || searchTerm.trim().length === 0}
+                  disabled={isSearching || nlSearchTerm.trim().length === 0}
                 >
                   {isSearching ? (
                     <>
@@ -154,39 +168,68 @@ export default function ProductListings() {
           </div>
         )}
 
-        {/* Filter bar */}
-        <div className="mb-6 flex flex-col sm:flex-row justify-start items-center gap-4 bg-white p-4 rounded-lg shadow-sm">
-          <div className="flex items-center gap-2">
-            <Filter className="h-4 w-4 text-gray-500" />
-            <span className="text-sm font-medium text-gray-700">Refine by:</span>
+        {/* Filter bar with quick search */}
+        <div className="mb-6 bg-white p-4 rounded-lg shadow-sm">
+          <div className="flex items-center gap-2 mb-4">
+            <Filter className="h-5 w-5 text-gray-500" />
+            <h3 className="text-md font-medium">Refine results:</h3>
           </div>
           
-          <div className="flex flex-wrap gap-4">
-            <Select value={industry} onValueChange={setIndustry}>
-              <SelectTrigger className="w-[180px]">
-                <SelectValue placeholder="All Industries" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="All Industries">All Industries</SelectItem>
-                <SelectItem value="SaaS">SaaS</SelectItem>
-                <SelectItem value="E-commerce">E-commerce</SelectItem>
-                <SelectItem value="Content">Content</SelectItem>
-                <SelectItem value="Marketplace">Marketplace</SelectItem>
-              </SelectContent>
-            </Select>
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+            {/* Quick name search */}
+            <div>
+              <label htmlFor="quick-search" className="block text-sm font-medium text-gray-700 mb-1">
+                Quick Search by Name
+              </label>
+              <div className="relative">
+                <Input
+                  id="quick-search"
+                  type="text"
+                  placeholder="Search by product name..."
+                  value={quickSearchTerm}
+                  onChange={(e) => setQuickSearchTerm(e.target.value)}
+                  className="w-full"
+                />
+                <div className="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
+                  <Search className="h-4 w-4 text-gray-400" />
+                </div>
+              </div>
+            </div>
             
-            <Select value={age} onValueChange={setAge}>
-              <SelectTrigger className="w-[180px]">
-                <SelectValue placeholder="Any Age" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="Any Age">Any Age</SelectItem>
-                <SelectItem value="Less than 1 year">0-1 Year</SelectItem>
-                <SelectItem value="1-2 years">1-2 Years</SelectItem>
-                <SelectItem value="3-5 years">3-5 Years</SelectItem>
-                <SelectItem value="5+ years">5+ Years</SelectItem>
-              </SelectContent>
-            </Select>
+            {/* Industry filter */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Industry</label>
+              <Select value={industry} onValueChange={setIndustry}>
+                <SelectTrigger className="w-full">
+                  <SelectValue placeholder="All Industries" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="All Industries">All Industries</SelectItem>
+                  <SelectItem value="SaaS">SaaS</SelectItem>
+                  <SelectItem value="E-commerce">E-commerce</SelectItem>
+                  <SelectItem value="Content">Content</SelectItem>
+                  <SelectItem value="Mobile App">Mobile App</SelectItem>
+                  <SelectItem value="Marketplace">Marketplace</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+            
+            {/* Age filter */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Company Age</label>
+              <Select value={age} onValueChange={setAge}>
+                <SelectTrigger className="w-full">
+                  <SelectValue placeholder="Any Age" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="Any Age">Any Age</SelectItem>
+                  <SelectItem value="Less than 1 year">0-1 Year</SelectItem>
+                  <SelectItem value="1-2 years">1-2 Years</SelectItem>
+                  <SelectItem value="3-5 years">3-5 Years</SelectItem>
+                  <SelectItem value="5+ years">5+ Years</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
           </div>
         </div>
 
@@ -214,7 +257,6 @@ export default function ProductListings() {
                           {product.age}
                         </span>
                       </div>
-
                     </div>
                     <Link href={`/product/${product.id}`} className="mt-4 block">
                       <h3 className="text-xl font-semibold text-dark hover:text-primary">{product.headline}</h3>
@@ -251,11 +293,7 @@ export default function ProductListings() {
                 <Button 
                   variant="outline" 
                   className="mt-4"
-                  onClick={() => {
-                    setSearchTerm("");
-                    setIndustry("All Industries");
-                    setAge("Any Age");
-                  }}
+                  onClick={clearAllFilters}
                 >
                   Clear All Filters
                 </Button>
