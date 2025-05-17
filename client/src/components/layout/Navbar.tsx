@@ -2,19 +2,43 @@ import { useState } from "react";
 import { Link, useLocation } from "wouter";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
-import { Menu } from "lucide-react";
+import { 
+  Menu, 
+  LogOut, 
+  User,
+  ChevronDown
+} from "lucide-react";
+import { useAuth } from "@/contexts/AuthContext";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 export default function Navbar() {
   const [location] = useLocation();
   const [isOpen, setIsOpen] = useState(false);
+  const { user, isAuthenticated, logout } = useAuth();
 
   const isActive = (path: string) => {
     return location === path;
   };
 
   const navItems = [
-    { name: "Investors and Buyers", path: "/buyers" },
-    { name: "Product Owners", path: "/sellers" },
+    { 
+      name: "Investors and Buyers", 
+      path: "/buyers",
+      // Restrict access if user is a seller
+      restricted: isAuthenticated && user?.role === "seller"
+    },
+    { 
+      name: "Product Owners", 
+      path: "/sellers",
+      // Restrict access if user is a buyer
+      restricted: isAuthenticated && user?.role === "buyer"
+    },
     { name: "How it works", path: "/how-it-works" },
     { name: "Contact", path: "/contact" }
   ];
@@ -46,11 +70,53 @@ export default function Navbar() {
             </div>
           </div>
           <div className="hidden sm:ml-6 sm:flex sm:items-center">
-            <Link href="/buyers">
-              <Button>
-                Login
-              </Button>
-            </Link>
+            {isAuthenticated ? (
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="ghost" className="flex items-center gap-2">
+                    <User className="h-4 w-4" />
+                    <span>
+                      {user?.firstName || user?.businessName || user?.email}
+                    </span>
+                    <ChevronDown className="h-4 w-4" />
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end">
+                  <DropdownMenuItem className="font-medium">
+                    {user?.role === "buyer" ? "Investor Account" : "Product Owner Account"}
+                  </DropdownMenuItem>
+                  <DropdownMenuSeparator />
+                  {user?.role === "buyer" && (
+                    <DropdownMenuItem asChild>
+                      <Link href="/search">Find Products</Link>
+                    </DropdownMenuItem>
+                  )}
+                  {user?.role === "seller" && (
+                    <DropdownMenuItem asChild>
+                      <Link href="/product-questionnaire">Add Product</Link>
+                    </DropdownMenuItem>
+                  )}
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem onClick={logout} className="text-red-500">
+                    <LogOut className="h-4 w-4 mr-2" />
+                    Logout
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            ) : (
+              <div className="flex gap-3">
+                <Link href="/login/buyer">
+                  <Button variant="outline">
+                    Investor Login
+                  </Button>
+                </Link>
+                <Link href="/login/seller">
+                  <Button>
+                    Owner Login
+                  </Button>
+                </Link>
+              </div>
+            )}
           </div>
           <div className="-mr-2 flex items-center sm:hidden">
             <Sheet open={isOpen} onOpenChange={setIsOpen}>
@@ -63,26 +129,70 @@ export default function Navbar() {
               <SheetContent side="right" className="sm:hidden">
                 <div className="pt-2 pb-3 space-y-1">
                   {navItems.map((item) => (
-                    <Link
-                      key={item.path}
-                      href={item.path}
-                      className={`${
-                        isActive(item.path)
-                          ? "bg-primary-50 border-primary text-primary"
-                          : "border-transparent text-gray-600 hover:bg-gray-50 hover:border-primary hover:text-primary"
-                      } block pl-3 pr-4 py-2 border-l-4 text-base font-medium`}
-                      onClick={() => setIsOpen(false)}
-                    >
-                      {item.name}
-                    </Link>
+                    !item.restricted && (
+                      <Link
+                        key={item.path}
+                        href={item.path}
+                        className={`${
+                          isActive(item.path)
+                            ? "bg-primary-50 border-primary text-primary"
+                            : "border-transparent text-gray-600 hover:bg-gray-50 hover:border-primary hover:text-primary"
+                        } block pl-3 pr-4 py-2 border-l-4 text-base font-medium`}
+                        onClick={() => setIsOpen(false)}
+                      >
+                        {item.name}
+                      </Link>
+                    )
                   ))}
-                  <Link
-                    href="/buyers"
-                    className="block pl-3 pr-4 py-2 border-l-4 border-primary text-primary bg-primary-50 text-base font-medium"
-                    onClick={() => setIsOpen(false)}
-                  >
-                    Login
-                  </Link>
+                  
+                  {isAuthenticated ? (
+                    <>
+                      {user?.role === "buyer" && (
+                        <Link
+                          href="/search"
+                          className="block pl-3 pr-4 py-2 border-l-4 text-gray-600 border-transparent hover:bg-gray-50 hover:border-primary hover:text-primary text-base font-medium"
+                          onClick={() => setIsOpen(false)}
+                        >
+                          Find Products
+                        </Link>
+                      )}
+                      {user?.role === "seller" && (
+                        <Link
+                          href="/product-questionnaire"
+                          className="block pl-3 pr-4 py-2 border-l-4 text-gray-600 border-transparent hover:bg-gray-50 hover:border-primary hover:text-primary text-base font-medium"
+                          onClick={() => setIsOpen(false)}
+                        >
+                          Add Product
+                        </Link>
+                      )}
+                      <button
+                        onClick={() => {
+                          logout();
+                          setIsOpen(false);
+                        }}
+                        className="w-full text-left block pl-3 pr-4 py-2 border-l-4 text-red-500 border-red-500 hover:bg-red-50 text-base font-medium"
+                      >
+                        Logout
+                      </button>
+                    </>
+                  ) : (
+                    <>
+                      <Link
+                        href="/login/buyer"
+                        className="block pl-3 pr-4 py-2 border-l-4 border-primary text-primary bg-primary-50 text-base font-medium"
+                        onClick={() => setIsOpen(false)}
+                      >
+                        Investor Login
+                      </Link>
+                      <Link
+                        href="/login/seller"
+                        className="block pl-3 pr-4 py-2 border-l-4 border-primary text-primary bg-primary-50 text-base font-medium"
+                        onClick={() => setIsOpen(false)}
+                      >
+                        Owner Login
+                      </Link>
+                    </>
+                  )}
                 </div>
               </SheetContent>
             </Sheet>

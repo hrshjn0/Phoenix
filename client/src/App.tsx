@@ -14,30 +14,37 @@ import MessagingPage from "@/pages/MessagingPage";
 import LoginPage from "@/pages/LoginPage";
 import RegisterPage from "@/pages/RegisterPage";
 import { ThemeProvider } from "next-themes";
+import { AuthProvider } from "@/contexts/AuthContext";
+import { QueryClientProvider } from "@tanstack/react-query";
+import { queryClient } from "@/lib/queryClient";
 
 function App() {
   return (
-    <ThemeProvider attribute="class" defaultTheme="light">
-      <TooltipProvider>
-        <Toaster />
-        <Switch>
-          <Route path="/" component={HomePage} />
-          <Route path="/buyers" component={BuyersPage} />
-          <Route path="/sellers" component={SellersPage} />
-          <Route path="/how-it-works" component={HowItWorksPage} />
-          <Route path="/contact" component={ContactPage} />
-          <Route path="/product-questionnaire" component={ProductQuestionnairePage} />
-          <Route path="/search" component={SearchResultsPage} />
-          <Route path="/product/:id" component={ProductDetailPage} />
-          <Route path="/messaging/:id" component={MessagingPage} />
-          <Route path="/login/buyer" component={LoginPage} />
-          <Route path="/login/seller" component={LoginPage} />
-          <Route path="/register/buyer" component={RegisterPage} />
-          <Route path="/register/seller" component={RegisterPage} />
-          <Route component={NotFound} />
-        </Switch>
-      </TooltipProvider>
-    </ThemeProvider>
+    <QueryClientProvider client={queryClient}>
+      <AuthProvider>
+        <ThemeProvider attribute="class" defaultTheme="light">
+          <TooltipProvider>
+            <Toaster />
+            <Switch>
+              <Route path="/" component={HomePage} />
+              <Route path="/buyers" component={BuyersPage} />
+              <Route path="/sellers" component={SellersPage} />
+              <Route path="/how-it-works" component={HowItWorksPage} />
+              <Route path="/contact" component={ContactPage} />
+              <Route path="/product-questionnaire" component={ProductQuestionnairePage} />
+              <Route path="/search" component={SearchResultsPage} />
+              <Route path="/product/:id" component={ProductDetailPage} />
+              <Route path="/messaging/:id" component={MessagingPage} />
+              <Route path="/login/buyer" component={LoginPage} />
+              <Route path="/login/seller" component={LoginPage} />
+              <Route path="/register/buyer" component={RegisterPage} />
+              <Route path="/register/seller" component={RegisterPage} />
+              <Route component={NotFound} />
+            </Switch>
+          </TooltipProvider>
+        </ThemeProvider>
+      </AuthProvider>
+    </QueryClientProvider>
   );
 }
 
