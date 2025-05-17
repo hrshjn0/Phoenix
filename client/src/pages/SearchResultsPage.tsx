@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useMemo, useEffect } from "react";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
 import SearchFilters from "@/components/search/SearchFilters";
@@ -13,16 +13,25 @@ export default function SearchResultsPage() {
   const [location] = useLocation();
   const queryParams = new URLSearchParams(location.split('?')[1] || '');
   
-  const [searchQuery, setSearchQuery] = useState(queryParams.get('q') || '');
-  const [industry, setIndustry] = useState(queryParams.get('industry') || 'All Industries');
-  const [age, setAge] = useState(queryParams.get('age') || 'Any Age');
-  const [revenue, setRevenue] = useState(queryParams.get('revenue') || 'Any Revenue');
+  // Parse query params
+  const initialQuery = queryParams.get('q') || '';
+  const initialIndustry = queryParams.get('industry') || 'All Industries';
+  const initialAge = queryParams.get('age') || 'Any Age';
+  const initialRevenue = queryParams.get('revenue') || 'Any Revenue';
+  
+  // State for filters
+  const [searchQuery, setSearchQuery] = useState(initialQuery);
+  const [industry, setIndustry] = useState(initialIndustry);
+  const [age, setAge] = useState(initialAge);
+  const [revenue, setRevenue] = useState(initialRevenue);
   const [searchExplanation, setSearchExplanation] = useState('');
   
-  const { data: products, isLoading, error } = useQuery<Product[]>({
+  // Fetch all products
+  const { data: products = [], isLoading, error } = useQuery<Product[]>({
     queryKey: ['/api/products'],
   });
-
+  
+  // Handle filter changes
   const handleFilterChange = (filterType: string, value: string) => {
     switch (filterType) {
       case 'query':
@@ -37,48 +46,63 @@ export default function SearchResultsPage() {
       case 'revenue':
         setRevenue(value);
         break;
-      default:
-        break;
     }
   };
-
-  // Generate search explanation when search query or products change
-  React.useEffect(() => {
-    if (searchQuery && products) {
-      const searchResults = naturalLanguageSearch(products, searchQuery);
-      const explanation = generateSearchExplanation(searchQuery, searchResults);
+  
+  // Apply natural language processing when search query or products change
+  useEffect(() => {
+    if (searchQuery && products.length > 0) {
+      // Get the natural language search results
+      const nlResults = naturalLanguageSearch(products, searchQuery);
+      // Generate explanation for this search
+      const explanation = generateSearchExplanation(searchQuery, nlResults);
       setSearchExplanation(explanation);
     } else {
       setSearchExplanation('');
     }
   }, [searchQuery, products]);
   
-  const filteredProducts = () => {
-    if (!products) return [];
+  // Memoize the filtered products to avoid recalculation on every render
+  const filteredProducts = useMemo(() => {
+    if (!products || products.length === 0) return [];
     
-    // First, apply natural language search if query exists
-    let results = products;
-    
-    if (searchQuery) {
-      // Use natural language search for more intelligent matching
-      results = naturalLanguageSearch(products, searchQuery);
-    }
+    // First apply natural language search if there's a query
+    let results = searchQuery ? naturalLanguageSearch(products, searchQuery) : [...products];
     
     // Then apply traditional filters
     return results.filter(product => {
-      const matchesIndustry = industry === 'All Industries' || product.industry === industry;
-      const matchesAge = age === 'Any Age' || product.age === age;
+      // Industry filter
+      const matchesIndustry = industry === 'All Industries' || 
+                             product.industry === industry;
+                             
+      // Age filter
+      const matchesAge = age === 'Any Age' || 
+                        product.age === age;
       
-      // Simple revenue filtering based on string patterns
-      const matchesRevenue = revenue === 'Any Revenue' || 
-        (revenue === '$0-50K ARR' && product.arr && parseInt(product.arr.replace(/[^\d]/g, '')) <= 50000) ||
-        (revenue === '$50-250K ARR' && product.arr && parseInt(product.arr.replace(/[^\d]/g, '')) > 50000 && parseInt(product.arr.replace(/[^\d]/g, '')) <= 250000) ||
-        (revenue === '$250K-1M ARR' && product.arr && parseInt(product.arr.replace(/[^\d]/g, '')) > 250000 && parseInt(product.arr.replace(/[^\d]/g, '')) <= 1000000) ||
-        (revenue === '$1M+ ARR' && product.arr && parseInt(product.arr.replace(/[^\d]/g, '')) > 1000000);
+      // Revenue filter
+      let matchesRevenue = revenue === 'Any Revenue';
+      if (!matchesRevenue && product.arr) {
+        const numericRevenue = parseInt(product.arr.replace(/[^\d]/g, ''));
+        
+        switch(revenue) {
+          case '$0-50K ARR':
+            matchesRevenue = numericRevenue <= 50000;
+            break;
+          case '$50-250K ARR':
+            matchesRevenue = numericRevenue > 50000 && numericRevenue <= 250000;
+            break;
+          case '$250K-1M ARR':
+            matchesRevenue = numericRevenue > 250000 && numericRevenue <= 1000000;
+            break;
+          case '$1M+ ARR':
+            matchesRevenue = numericRevenue > 1000000;
+            break;
+        }
+      }
       
       return matchesIndustry && matchesAge && matchesRevenue;
     });
-  };
+  }, [products, searchQuery, industry, age, revenue]);
 
   return (
     <>
@@ -120,9 +144,9 @@ export default function SearchResultsPage() {
           />
 
           <SearchResults 
-            products={filteredProducts()}
+            products={filteredProducts}
             isLoading={isLoading}
-            error={error}
+            error={error as Error}
           />
         </main>
         <Footer />

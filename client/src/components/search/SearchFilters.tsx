@@ -71,8 +71,8 @@ export default function SearchFilters({
                 type="text"
                 value={searchQuery}
                 onChange={(e) => onFilterChange("query", e.target.value)}
-                className="sm:w-64"
-                placeholder="Search products..."
+                className="sm:w-80"
+                placeholder="Try 'SaaS with high growth potential' or 'Mobile app with active users'..."
               />
               <div className="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
                 <Search className="h-4 w-4 text-gray-400" />
