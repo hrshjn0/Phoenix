@@ -8,7 +8,58 @@ import { login, register, authenticate, getCurrentUser } from "./auth";
 export async function registerRoutes(app: Express): Promise<Server> {
   // Auth Routes
   app.post('/api/auth/register', register);
-  app.post('/api/auth/login', login);
+  
+  // Custom login handler to enforce role validation
+  app.post('/api/auth/login', async (req, res) => {
+    try {
+      const { email, password, role } = req.body;
+      console.log('Login request received:', { email, hasPassword: !!password, role });
+      
+      // Find user
+      const user = await storage.getUserByEmail(email);
+      
+      if (!user) {
+        console.log('User not found');
+        return res.status(400).json({ message: 'Invalid email or password' });
+      }
+      
+      console.log('User found:', { id: user.id, email: user.email, role: user.role });
+      
+      // Check password
+      const isValidPassword = await import('./auth').then(auth => auth.comparePassword(password, user.password));
+      if (!isValidPassword) {
+        console.log('Invalid password');
+        return res.status(400).json({ message: 'Invalid email or password' });
+      }
+      
+      // Strict role checking
+      if (role && role !== user.role) {
+        console.log('Role mismatch:', { requestedRole: role, actualRole: user.role });
+        return res.status(403).json({
+          message: 'You are not authorized to log in with this account type'
+        });
+      }
+      
+      // Generate token
+      const token = await import('./auth').then(auth => auth.generateToken(user.id, user.email, user.role));
+      
+      // Return user info (without password)
+      const { password: _, ...userWithoutPassword } = user;
+      
+      console.log('Login successful for user:', { id: user.id, role: user.role });
+      
+      res.json({
+        message: 'Login successful',
+        user: userWithoutPassword,
+        token
+      });
+      
+    } catch (error) {
+      console.error('Login error:', error);
+      res.status(500).json({ message: 'Server error during login' });
+    }
+  });
+  
   app.get('/api/auth/me', authenticate, getCurrentUser);
   
   // API Routes
