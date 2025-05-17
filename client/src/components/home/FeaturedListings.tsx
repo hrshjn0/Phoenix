@@ -3,15 +3,8 @@ import { Link } from "wouter";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { useAuth } from "@/contexts/AuthContext";
 
 export default function FeaturedListings() {
-  const { user } = useAuth();
-  
-  // Hide featured listings for product owners (sellers)
-  if (user?.role === "seller") {
-    return null;
-  }
   const mockListings = [
     {
       id: 1,

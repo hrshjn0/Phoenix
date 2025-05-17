@@ -30,14 +30,14 @@ export default function Navbar() {
     { 
       name: "Investors and Buyers", 
       path: "/buyers",
-      // Restrict access only if user is logged in as a seller
-      restricted: user?.role === "seller"
+      // Restrict access if user is a seller
+      restricted: isAuthenticated && user?.role === "seller"
     },
     { 
       name: "Product Owners", 
       path: "/sellers",
-      // Restrict access only if user is logged in as a buyer
-      restricted: user?.role === "buyer"
+      // Restrict access if user is a buyer
+      restricted: isAuthenticated && user?.role === "buyer"
     },
     { name: "How it works", path: "/how-it-works" },
     { name: "Contact", path: "/contact" }
@@ -55,19 +55,17 @@ export default function Navbar() {
             </div>
             <div className="hidden sm:ml-6 sm:flex sm:space-x-8">
               {navItems.map((item) => (
-                !item.restricted && (
-                  <Link 
-                    key={item.path} 
-                    href={item.path}
-                    className={`${
-                      isActive(item.path)
-                        ? "border-primary text-primary" 
-                        : "border-transparent text-gray-500 hover:border-primary hover:text-primary"
-                    } inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium`}
-                  >
-                    {item.name}
-                  </Link>
-                )
+                <Link 
+                  key={item.path} 
+                  href={item.path}
+                  className={`${
+                    isActive(item.path)
+                      ? "border-primary text-primary" 
+                      : "border-transparent text-gray-500 hover:border-primary hover:text-primary"
+                  } inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium`}
+                >
+                  {item.name}
+                </Link>
               ))}
             </div>
           </div>
