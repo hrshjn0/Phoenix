@@ -152,7 +152,7 @@ export async function login(req: Request, res: Response) {
       });
     }
     
-    const { email, password } = validationResult.data;
+    const { email, password, role } = validationResult.data;
     
     // Find user
     const user = await storage.getUserByEmail(email);
@@ -166,6 +166,13 @@ export async function login(req: Request, res: Response) {
     
     if (!isPasswordValid) {
       return res.status(400).json({ message: 'Invalid email or password' });
+    }
+    
+    // Verify role if provided
+    if (role && user.role !== role) {
+      return res.status(403).json({ 
+        message: 'You are not authorized to log in with this account type' 
+      });
     }
     
     // Generate token

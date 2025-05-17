@@ -36,6 +36,7 @@ export default function LoginForm({ userType, onLoginSuccess }: LoginFormProps) 
     defaultValues: {
       email: "",
       password: "",
+      role: userType, // Set default role based on userType prop
     },
   });
 

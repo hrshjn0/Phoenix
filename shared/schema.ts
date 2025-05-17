@@ -31,6 +31,9 @@ export const registerUserSchema = z.object({
 export const loginUserSchema = z.object({
   email: z.string().email({ message: "Please enter a valid email address" }),
   password: z.string().min(1, { message: "Password is required" }),
+  role: z.enum(["buyer", "seller"], { 
+    invalid_type_error: "Role must be either buyer or seller",
+  }).optional(),
 });
 
 export const insertUserSchema = createInsertSchema(users).omit({
