@@ -104,18 +104,25 @@ export default function Navbar() {
                 </DropdownMenuContent>
               </DropdownMenu>
             ) : (
-              <div className="flex gap-3">
-                <Link href="/login/buyer">
-                  <Button variant="outline">
-                    Investor Login
-                  </Button>
-                </Link>
-                <Link href="/login/seller">
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
                   <Button>
-                    Owner Login
+                    Login
                   </Button>
-                </Link>
-              </div>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end">
+                  <DropdownMenuItem asChild>
+                    <Link href="/login/buyer" className="flex w-full cursor-pointer">
+                      Investor Login
+                    </Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem asChild>
+                    <Link href="/login/seller" className="flex w-full cursor-pointer">
+                      Owner Login
+                    </Link>
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
             )}
           </div>
           <div className="-mr-2 flex items-center sm:hidden">
@@ -177,19 +184,22 @@ export default function Navbar() {
                     </>
                   ) : (
                     <>
+                      <div className="block pl-3 pr-4 py-2 border-l-4 border-primary text-primary bg-primary-50 text-base font-medium">
+                        Login as:
+                      </div>
                       <Link
                         href="/login/buyer"
-                        className="block pl-3 pr-4 py-2 border-l-4 border-primary text-primary bg-primary-50 text-base font-medium"
+                        className="block pl-6 pr-4 py-2 border-l-4 border-transparent text-gray-600 hover:bg-gray-50 hover:border-primary hover:text-primary text-base font-medium"
                         onClick={() => setIsOpen(false)}
                       >
-                        Investor Login
+                        Investor
                       </Link>
                       <Link
                         href="/login/seller"
-                        className="block pl-3 pr-4 py-2 border-l-4 border-primary text-primary bg-primary-50 text-base font-medium"
+                        className="block pl-6 pr-4 py-2 border-l-4 border-transparent text-gray-600 hover:bg-gray-50 hover:border-primary hover:text-primary text-base font-medium"
                         onClick={() => setIsOpen(false)}
                       >
-                        Owner Login
+                        Product Owner
                       </Link>
                     </>
                   )}
