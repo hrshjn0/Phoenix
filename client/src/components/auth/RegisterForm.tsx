@@ -51,7 +51,8 @@ export default function RegisterForm({ initialUserType = "buyer", onRegisterSucc
     },
   });
   
-  const userType = form.watch("role");
+  // We'll use the initialUserType directly from props instead of watching the form value
+  const userType = initialUserType;
 
   const registerMutation = useMutation({
     mutationFn: async (data: FormValues) => {
@@ -114,33 +115,8 @@ export default function RegisterForm({ initialUserType = "buyer", onRegisterSucc
         )}
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-            <FormField
-              control={form.control}
-              name="role"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Account Type</FormLabel>
-                  <Select 
-                    onValueChange={field.onChange} 
-                    defaultValue={field.value}
-                  >
-                    <FormControl>
-                      <SelectTrigger>
-                        <SelectValue placeholder="Select account type" />
-                      </SelectTrigger>
-                    </FormControl>
-                    <SelectContent>
-                      <SelectItem value="buyer">Investor/Buyer</SelectItem>
-                      <SelectItem value="seller">Product Owner/Seller</SelectItem>
-                    </SelectContent>
-                  </Select>
-                  <FormDescription>
-                    Choose what type of account you want to create
-                  </FormDescription>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+            {/* Role is hidden and automatically set based on URL parameter */}
+            <input type="hidden" {...form.register("role")} />
             
             <FormField
               control={form.control}
