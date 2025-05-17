@@ -30,14 +30,14 @@ export default function Navbar() {
     { 
       name: "Investors and Buyers", 
       path: "/buyers",
-      // Restrict access if user is a seller
-      restricted: isAuthenticated && user?.role === "seller"
+      // Restrict access only if user is logged in as a seller
+      restricted: user?.role === "seller"
     },
     { 
       name: "Product Owners", 
       path: "/sellers",
-      // Restrict access if user is a buyer
-      restricted: isAuthenticated && user?.role === "buyer"
+      // Restrict access only if user is logged in as a buyer
+      restricted: user?.role === "buyer"
     },
     { name: "How it works", path: "/how-it-works" },
     { name: "Contact", path: "/contact" }
