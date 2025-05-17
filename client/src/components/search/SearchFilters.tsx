@@ -1,7 +1,6 @@
 import React from "react";
-import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Search } from "lucide-react";
+import { Filter } from "lucide-react";
 
 interface SearchFiltersProps {
   searchQuery: string;
@@ -12,20 +11,24 @@ interface SearchFiltersProps {
 }
 
 export default function SearchFilters({
-  searchQuery,
   industry,
   age,
   revenue,
   onFilterChange
 }: SearchFiltersProps) {
   return (
-    <div className="bg-white border-b border-gray-200">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="py-4 flex flex-col sm:flex-row justify-between items-center">
-          <div className="flex items-center space-x-4 mb-4 sm:mb-0">
-            <span className="text-sm text-gray-500">Filter by:</span>
+    <div className="bg-white border border-gray-200 rounded-lg shadow-sm mb-8">
+      <div className="p-4">
+        <div className="flex items-center gap-2 mb-4">
+          <Filter className="h-5 w-5 text-gray-500" />
+          <h3 className="text-md font-medium">Refine results by:</h3>
+        </div>
+        
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">Industry</label>
             <Select value={industry} onValueChange={(value) => onFilterChange("industry", value)}>
-              <SelectTrigger className="w-[180px]">
+              <SelectTrigger className="w-full">
                 <SelectValue placeholder="All Industries" />
               </SelectTrigger>
               <SelectContent>
@@ -37,9 +40,12 @@ export default function SearchFilters({
                 <SelectItem value="Marketplace">Marketplace</SelectItem>
               </SelectContent>
             </Select>
-            
+          </div>
+          
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">Company Age</label>
             <Select value={age} onValueChange={(value) => onFilterChange("age", value)}>
-              <SelectTrigger className="w-[180px]">
+              <SelectTrigger className="w-full">
                 <SelectValue placeholder="Any Age" />
               </SelectTrigger>
               <SelectContent>
@@ -50,9 +56,12 @@ export default function SearchFilters({
                 <SelectItem value="5+ years">5+ Years</SelectItem>
               </SelectContent>
             </Select>
+          </div>
 
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">Annual Revenue</label>
             <Select value={revenue} onValueChange={(value) => onFilterChange("revenue", value)}>
-              <SelectTrigger className="w-[180px]">
+              <SelectTrigger className="w-full">
                 <SelectValue placeholder="Any Revenue" />
               </SelectTrigger>
               <SelectContent>
@@ -63,21 +72,6 @@ export default function SearchFilters({
                 <SelectItem value="$1M+ ARR">$1M+ ARR</SelectItem>
               </SelectContent>
             </Select>
-          </div>
-          
-          <div className="w-full sm:w-auto">
-            <div className="relative rounded-md shadow-sm">
-              <Input
-                type="text"
-                value={searchQuery}
-                onChange={(e) => onFilterChange("query", e.target.value)}
-                className="sm:w-80"
-                placeholder="Try 'SaaS with high growth potential' or 'Mobile app with active users'..."
-              />
-              <div className="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
-                <Search className="h-4 w-4 text-gray-400" />
-              </div>
-            </div>
           </div>
         </div>
       </div>

@@ -3,6 +3,7 @@ import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
 import SearchFilters from "@/components/search/SearchFilters";
 import SearchResults from "@/components/search/SearchResults";
+import NaturalLanguageSearch from "@/components/search/NaturalLanguageSearch";
 import { useLocation } from "wouter";
 import { useQuery } from "@tanstack/react-query";
 import { Product } from "@shared/schema";
@@ -135,13 +136,20 @@ export default function SearchResultsPage() {
             </div>
           </div>
 
-          <SearchFilters 
-            searchQuery={searchQuery}
-            industry={industry}
-            age={age}
-            revenue={revenue}
-            onFilterChange={handleFilterChange}
-          />
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+            <NaturalLanguageSearch 
+              initialQuery={searchQuery}
+              onSearch={(query) => handleFilterChange("query", query)}
+            />
+            
+            <SearchFilters 
+              searchQuery={searchQuery}
+              industry={industry}
+              age={age}
+              revenue={revenue}
+              onFilterChange={handleFilterChange}
+            />
+          </div>
 
           <SearchResults 
             products={filteredProducts}
