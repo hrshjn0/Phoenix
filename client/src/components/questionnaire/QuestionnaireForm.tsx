@@ -128,8 +128,8 @@ export default function QuestionnaireForm() {
   const mutation = useMutation({
     mutationFn: async (values: FormValues) => {
       try {
-        // Create minimal product data with only essential fields
-        const simpleProductData = {
+        // Convert empty strings to null or use default values
+        const productData = {
           name: values.name || "New Product",
           description: values.description || "Product description",
           category: values.category || "SaaS",
@@ -137,12 +137,37 @@ export default function QuestionnaireForm() {
           businessModel: values.businessModel || "B2B",
           features: values.features || "Product features",
           launchYear: values.launchYear || "2023",
-          isActive: values.isActive
+          isActive: values.isActive,
+          
+          // Handle optional fields, convert empty strings to null
+          thirdPartyRating: values.thirdPartyRating?.length ? values.thirdPartyRating : null,
+          numberOfClients: values.numberOfClients?.length ? values.numberOfClients : null,
+          totalUsers: values.totalUsers?.length ? values.totalUsers : null,
+          activeUsers: values.activeUsers?.length ? values.activeUsers : null,
+          revenue: values.revenue?.length ? values.revenue : null,
+          averageDealSize: values.averageDealSize?.length ? values.averageDealSize : null,
+          averageSalesCycle: values.averageSalesCycle?.length ? values.averageSalesCycle : null,
+          investmentHistory: values.investmentHistory?.length ? values.investmentHistory : null,
+          techStack: values.techStack?.length ? values.techStack : null,
+          ipDetails: values.ipDetails?.length ? values.ipDetails : null,
+          parentCompanyBackground: values.parentCompanyBackground?.length ? values.parentCompanyBackground : null,
+          additionalDetails: values.additionalDetails?.length ? values.additionalDetails : null,
+          brochureUrl: values.brochureUrl?.length ? values.brochureUrl : null,
+          
+          // Handle fields from the Additional Information tab
+          teamStructure: values.teamStructure?.length ? values.teamStructure : null,
+          growthOpportunities: values.growthOpportunities?.length ? values.growthOpportunities : null,
+          reasonForSelling: values.reasonForSelling?.length ? values.reasonForSelling : null
         };
         
-        console.log("Submitting simplified product data:", simpleProductData);
+        console.log("Submitting clean product data:", productData);
         
-        const response = await apiRequest("POST", "/api/products", simpleProductData);
+        const response = await apiRequest("POST", "/api/products", productData);
+        if (!response.ok) {
+          const errorText = await response.text();
+          console.error("Server error response:", errorText);
+          throw new Error(errorText);
+        }
         return response.json();
       } catch (error) {
         console.error("Error in mutation function:", error);

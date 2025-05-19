@@ -101,10 +101,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
       
       console.log('Product submission body:', req.body);
       
-      // Create basic minimal product object with just the required fields
-      const minimalProductData = {
+      // Create product data object with only the fields present in our database schema
+      const productData = {
         sellerId: userId,
-        headline: req.body.name || 'New Product', 
         name: req.body.name || 'New Product',
         description: req.body.description || 'Product description',
         industry: req.body.industry || 'Technology',
@@ -113,13 +112,35 @@ export async function registerRoutes(app: Express): Promise<Server> {
         businessModel: req.body.businessModel || 'B2B',
         launchYear: req.body.launchYear || '2023',
         isActive: true,
-        age: '1-2 years' // For backward compatibility
+        
+        // Optional fields
+        logo: req.body.logo || null,
+        thirdPartyRating: req.body.thirdPartyRating || null,
+        numberOfClients: req.body.numberOfClients || null,
+        totalUsers: req.body.totalUsers || null,
+        activeUsers: req.body.activeUsers || null,
+        revenue: req.body.revenue || null,
+        averageDealSize: req.body.averageDealSize || null,
+        averageSalesCycle: req.body.averageSalesCycle || null,
+        investmentHistory: req.body.investmentHistory || null,
+        techStack: req.body.techStack || null,
+        ipDetails: req.body.ipDetails || null,
+        parentCompanyBackground: req.body.parentCompanyBackground || null,
+        additionalDetails: req.body.additionalDetails || null,
+        brochureUrl: req.body.brochureUrl || null,
+        
+        // For those fields that existed in old schema but may not be in the current one
+        // they'll be ignored if they don't match the DB schema
+        teamStructure: req.body.teamStructure || null,
+        growthOpportunities: req.body.growthOpportunities || null,
+        reasonForSelling: req.body.reasonForSelling || null,
+        headline: req.body.name || null
       };
       
-      console.log('Creating minimal product:', minimalProductData);
+      console.log('Creating product:', productData);
       
-      // Create the product with just the minimal required fields
-      const product = await storage.createProduct(minimalProductData);
+      // Create the product with all our fields
+      const product = await storage.createProduct(productData);
       
       res.status(201).json(product);
     } catch (error) {
