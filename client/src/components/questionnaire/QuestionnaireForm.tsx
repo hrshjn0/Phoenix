@@ -127,16 +127,44 @@ export default function QuestionnaireForm() {
   
   const mutation = useMutation({
     mutationFn: async (values: FormValues) => {
-      // Set the seller ID from the authenticated user
-      const productData = {
-        ...values,
-        sellerId: user?.id ?? 1,
-        // Map name to headline for backward compatibility
-        headline: values.name
-      };
-      
-      const response = await apiRequest("POST", "/api/products", productData);
-      return response.json();
+      try {
+        // Prepare a minimal product data with required fields
+        const productData = {
+          // Core fields from form
+          name: values.name,
+          description: values.description,
+          category: values.category,
+          industry: values.industry,
+          businessModel: values.businessModel,
+          launchYear: values.launchYear,
+          features: values.features,
+          isActive: values.isActive,
+          logo: values.logo,
+          
+          // Optional fields that may be empty
+          thirdPartyRating: values.thirdPartyRating || "",
+          numberOfClients: values.numberOfClients || "",
+          totalUsers: values.totalUsers || "",
+          activeUsers: values.activeUsers || "",
+          revenue: values.revenue || "",
+          averageDealSize: values.averageDealSize || "",
+          averageSalesCycle: values.averageSalesCycle || "",
+          investmentHistory: values.investmentHistory || "",
+          techStack: values.techStack || "",
+          ipDetails: values.ipDetails || "",
+          parentCompanyBackground: values.parentCompanyBackground || "",
+          additionalDetails: values.additionalDetails || "",
+          brochureUrl: values.brochureUrl || "",
+        };
+        
+        console.log("Submitting product data:", productData);
+        
+        const response = await apiRequest("POST", "/api/products", productData);
+        return response.json();
+      } catch (error) {
+        console.error("Error in mutation function:", error);
+        throw error;
+      }
     },
     onSuccess: (data) => {
       toast({

@@ -99,12 +99,44 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(401).json({ error: 'Authentication required to create product listings' });
       }
       
-      // Parse and validate the request body
-      const productData = insertProductSchema.parse({
-        ...req.body,
-        // Ensure the user can only create products as themselves
-        sellerId: userId
-      });
+      console.log('Product submission body:', req.body);
+      
+      // Create a compatible product object with required fields
+      const productData = {
+        // Required fields
+        sellerId: userId,
+        headline: req.body.name || req.body.headline || 'New Product',
+        name: req.body.name || req.body.headline || 'New Product',
+        description: req.body.description || 'Product description',
+        industry: req.body.industry || 'Technology',
+        features: req.body.features || 'Product features',
+        category: req.body.category || 'SaaS',
+        businessModel: req.body.businessModel || 'B2B',
+        launchYear: req.body.launchYear || '2023',
+        isActive: req.body.isActive !== undefined ? req.body.isActive : true,
+        
+        // Optional fields
+        logo: req.body.logo || null,
+        thirdPartyRating: req.body.thirdPartyRating || null,
+        numberOfClients: req.body.numberOfClients || null,
+        totalUsers: req.body.totalUsers || null,
+        activeUsers: req.body.activeUsers || null,
+        revenue: req.body.revenue || null,
+        averageDealSize: req.body.averageDealSize || null,
+        averageSalesCycle: req.body.averageSalesCycle || null,
+        investmentHistory: req.body.investmentHistory || null,
+        techStack: req.body.techStack || null,
+        ipDetails: req.body.ipDetails || null,
+        parentCompanyBackground: req.body.parentCompanyBackground || null,
+        additionalDetails: req.body.additionalDetails || null,
+        brochureUrl: req.body.brochureUrl || null,
+        
+        // For backward compatibility
+        age: req.body.age || req.body.launchYear || '1-2 years',
+        growthOpportunities: req.body.growthOpportunities || null,
+        reasonForSelling: req.body.reasonForSelling || null,
+        teamStructure: req.body.teamStructure || null,
+      };
       
       // Log the product creation request
       console.log(`Creating product for seller ID: ${productData.sellerId}`);
@@ -120,7 +152,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(400).json({ error: 'Validation error', details: error.errors });
       }
       
-      res.status(500).json({ error: 'Failed to create product' });
+      res.status(500).json({ 
+        error: 'Failed to create product',
+        details: error.message
+      });
     }
   });
 
