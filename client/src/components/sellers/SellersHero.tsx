@@ -1,7 +1,11 @@
 import { Link } from "wouter";
 import { Button } from "@/components/ui/button";
+import { useAuth } from "@/contexts/AuthContext";
 
 export default function SellersHero() {
+  const { user, isAuthenticated } = useAuth();
+  const isSeller = user?.role === "seller";
+  
   return (
     <div className="relative bg-dark">
       <div className="absolute inset-0">
@@ -21,12 +25,21 @@ export default function SellersHero() {
             size="lg"
             className="bg-gray-700 hover:bg-gray-800 text-white"
           >
-            <Link href="/product-questionnaire">
-              List Your Product
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 ml-2" viewBox="0 0 20 20" fill="currentColor">
-                <path fillRule="evenodd" d="M10.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L12.586 11H5a1 1 0 110-2h7.586l-2.293-2.293a1 1 0 010-1.414z" clipRule="evenodd" />
-              </svg>
-            </Link>
+            {(isAuthenticated && isSeller) ? (
+              <Link href="/product-questionnaire">
+                List Your Product
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 ml-2" viewBox="0 0 20 20" fill="currentColor">
+                  <path fillRule="evenodd" d="M10.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L12.586 11H5a1 1 0 110-2h7.586l-2.293-2.293a1 1 0 010-1.414z" clipRule="evenodd" />
+                </svg>
+              </Link>
+            ) : (
+              <Link href="/login?role=seller">
+                Login as Product Owner to List
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 ml-2" viewBox="0 0 20 20" fill="currentColor">
+                  <path fillRule="evenodd" d="M10.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L12.586 11H5a1 1 0 110-2h7.586l-2.293-2.293a1 1 0 010-1.414z" clipRule="evenodd" />
+                </svg>
+              </Link>
+            )}
           </Button>
         </div>
       </div>
