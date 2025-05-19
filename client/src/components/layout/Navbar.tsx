@@ -30,14 +30,12 @@ export default function Navbar() {
     { 
       name: "Investors and Buyers", 
       path: "/buyers",
-      // Restrict access if user is a seller
-      restricted: isAuthenticated && user?.role === "seller"
+      restricted: false // Show for all users
     },
     { 
       name: "Product Owners", 
       path: "/sellers",
-      // Restrict access if user is a buyer
-      restricted: isAuthenticated && user?.role === "buyer"
+      restricted: false // Show for all users
     },
     { name: "How it works", path: "/how-it-works" },
     { name: "Contact", path: "/contact" }
@@ -138,20 +136,18 @@ export default function Navbar() {
               <SheetContent side="right" className="sm:hidden">
                 <div className="pt-2 pb-3 space-y-1">
                   {navItems.map((item) => (
-                    !item.restricted && (
-                      <Link
-                        key={item.path}
-                        href={item.path}
-                        className={`${
-                          isActive(item.path)
-                            ? "bg-primary-50 border-primary text-primary"
-                            : "border-transparent text-gray-600 hover:bg-gray-50 hover:border-primary hover:text-primary"
-                        } block pl-3 pr-4 py-2 border-l-4 text-base font-medium`}
-                        onClick={() => setIsOpen(false)}
-                      >
-                        {item.name}
-                      </Link>
-                    )
+                    <Link
+                      key={item.path}
+                      href={item.path}
+                      className={`${
+                        isActive(item.path)
+                          ? "bg-primary-50 border-primary text-primary"
+                          : "border-transparent text-gray-600 hover:bg-gray-50 hover:border-primary hover:text-primary"
+                      } block pl-3 pr-4 py-2 border-l-4 text-base font-medium`}
+                      onClick={() => setIsOpen(false)}
+                    >
+                      {item.name}
+                    </Link>
                   ))}
                   
                   {isAuthenticated ? (
