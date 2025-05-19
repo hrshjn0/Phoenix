@@ -29,6 +29,7 @@ import { insertProductSchema } from "@shared/schema";
 import { useLocation } from "wouter";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Upload } from "lucide-react";
+import { useAuth } from "@/contexts/AuthContext";
 
 // Create the extended schema with validations
 const formSchema = insertProductSchema.extend({
@@ -122,23 +123,34 @@ export default function QuestionnaireForm() {
     },
   });
 
+  const { user } = useAuth();
+  
   const mutation = useMutation({
     mutationFn: async (values: FormValues) => {
-      const response = await apiRequest("POST", "/api/products", values);
+      // Set the seller ID from the authenticated user
+      const productData = {
+        ...values,
+        sellerId: user?.id ?? 1,
+        // Map name to headline for backward compatibility
+        headline: values.name
+      };
+      
+      const response = await apiRequest("POST", "/api/products", productData);
       return response.json();
     },
     onSuccess: (data) => {
       toast({
-        title: "Product Listed",
-        description: "Your product has been successfully listed on our marketplace.",
+        title: "Product Listed Successfully",
+        description: "Your product has been successfully listed and will be visible to investors.",
       });
       navigate(`/product/${data.id}`);
     },
     onError: (error) => {
+      console.error("Error submitting product:", error);
       toast({
         variant: "destructive",
-        title: "Error",
-        description: "There was a problem submitting your product listing. Please try again.",
+        title: "Submission Error",
+        description: "There was a problem submitting your product listing. Please check your information and try again.",
       });
     },
   });

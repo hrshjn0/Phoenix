@@ -90,19 +90,36 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  app.post('/api/products', async (req, res) => {
+  app.post('/api/products', authenticate, async (req, res) => {
     try {
+      // Get the authenticated user ID from the token
+      const userId = (req as any).user?.id;
+      
+      if (!userId) {
+        return res.status(401).json({ error: 'Authentication required to create product listings' });
+      }
+      
       // Parse and validate the request body
-      const productData = insertProductSchema.parse(req.body);
+      const productData = insertProductSchema.parse({
+        ...req.body,
+        // Ensure the user can only create products as themselves
+        sellerId: userId
+      });
+      
+      // Log the product creation request
+      console.log(`Creating product for seller ID: ${productData.sellerId}`);
       
       // Create the product
       const product = await storage.createProduct(productData);
       
       res.status(201).json(product);
     } catch (error) {
+      console.error('Error creating product:', error);
+      
       if (error instanceof z.ZodError) {
         return res.status(400).json({ error: 'Validation error', details: error.errors });
       }
+      
       res.status(500).json({ error: 'Failed to create product' });
     }
   });
