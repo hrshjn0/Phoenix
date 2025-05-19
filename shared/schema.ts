@@ -45,24 +45,40 @@ export const insertUserSchema = createInsertSchema(users).omit({
 export const products = pgTable("products", {
   id: serial("id").primaryKey(),
   sellerId: integer("seller_id").notNull(),
-  headline: text("headline").notNull(),
-  description: text("description").notNull(),
+  name: text("name").notNull(),
+  category: text("category").notNull(),
   industry: text("industry").notNull(),
-  age: text("age").notNull(),
+  isActive: boolean("is_active").default(true),
+  businessModel: text("business_model").notNull(), // B2B, B2C, or Both
+  launchYear: text("launch_year").notNull(),
+  description: text("description").notNull(),
   features: text("features").notNull(),
+  logo: text("logo"), // URL or file path to uploaded logo
+  
+  // Additional optional information
+  thirdPartyRating: text("third_party_rating"),
+  numberOfClients: text("number_of_clients"),
   totalUsers: text("total_users"),
   activeUsers: text("active_users"),
-  arr: text("arr"), // Annual Recurring Revenue
+  revenue: text("revenue"),
+  averageDealSize: text("average_deal_size"),
+  averageSalesCycle: text("average_sales_cycle"),
+  investmentHistory: text("investment_history"),
   techStack: text("tech_stack"),
-  teamStructure: text("team_structure"),
+  ipDetails: text("ip_details"),
+  parentCompanyBackground: text("parent_company_background"),
+  additionalDetails: text("additional_details"),
+  brochureUrl: text("brochure_url"),
+  
+  // For backward compatibility and additional fields
+  headline: text("headline"),
+  age: text("age"),
   growthOpportunities: text("growth_opportunities"),
   reasonForSelling: text("reason_for_selling"),
-  thirdPartyRating: text("third_party_rating"),
-  ipOwnership: text("ip_ownership"),
   registeredTrademarks: text("registered_trademarks"),
   patents: text("patents"),
-  averageDealPrice: text("average_deal_price"),
-  isActive: boolean("is_active").default(true),
+  teamStructure: text("team_structure"),
+  
   createdAt: timestamp("created_at").defaultNow().notNull(),
 });
 
