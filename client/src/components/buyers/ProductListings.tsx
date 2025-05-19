@@ -390,7 +390,7 @@ export default function ProductListings() {
                   <CardFooter className="border-t pt-4 mt-auto">
                     <Button asChild className="w-full">
                       <Link href="/login?role=buyer">
-                        Login as Investor to View
+                        View Details
                       </Link>
                     </Button>
                   </CardFooter>
@@ -401,7 +401,7 @@ export default function ProductListings() {
             <div className="mt-12 text-center">
               <Button asChild size="lg" variant="outline">
                 <Link href="/login?role=buyer">
-                  View All Listings
+                  View All Products
                 </Link>
               </Button>
             </div>
