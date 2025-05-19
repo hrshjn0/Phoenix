@@ -101,60 +101,40 @@ export async function registerRoutes(app: Express): Promise<Server> {
       
       console.log('Product submission body:', req.body);
       
-      // Create a compatible product object with required fields
-      const productData = {
-        // Required fields
+      // Create basic minimal product object with just the required fields
+      const minimalProductData = {
         sellerId: userId,
-        headline: req.body.name || req.body.headline || 'New Product',
-        name: req.body.name || req.body.headline || 'New Product',
+        headline: req.body.name || 'New Product', 
+        name: req.body.name || 'New Product',
         description: req.body.description || 'Product description',
         industry: req.body.industry || 'Technology',
         features: req.body.features || 'Product features',
         category: req.body.category || 'SaaS',
         businessModel: req.body.businessModel || 'B2B',
         launchYear: req.body.launchYear || '2023',
-        isActive: req.body.isActive !== undefined ? req.body.isActive : true,
-        
-        // Optional fields
-        logo: req.body.logo || null,
-        thirdPartyRating: req.body.thirdPartyRating || null,
-        numberOfClients: req.body.numberOfClients || null,
-        totalUsers: req.body.totalUsers || null,
-        activeUsers: req.body.activeUsers || null,
-        revenue: req.body.revenue || null,
-        averageDealSize: req.body.averageDealSize || null,
-        averageSalesCycle: req.body.averageSalesCycle || null,
-        investmentHistory: req.body.investmentHistory || null,
-        techStack: req.body.techStack || null,
-        ipDetails: req.body.ipDetails || null,
-        parentCompanyBackground: req.body.parentCompanyBackground || null,
-        additionalDetails: req.body.additionalDetails || null,
-        brochureUrl: req.body.brochureUrl || null,
-        
-        // For backward compatibility
-        age: req.body.age || req.body.launchYear || '1-2 years',
-        growthOpportunities: req.body.growthOpportunities || null,
-        reasonForSelling: req.body.reasonForSelling || null,
-        teamStructure: req.body.teamStructure || null,
+        isActive: true,
+        age: '1-2 years' // For backward compatibility
       };
       
-      // Log the product creation request
-      console.log(`Creating product for seller ID: ${productData.sellerId}`);
+      console.log('Creating minimal product:', minimalProductData);
       
-      // Create the product
-      const product = await storage.createProduct(productData);
+      // Create the product with just the minimal required fields
+      const product = await storage.createProduct(minimalProductData);
       
       res.status(201).json(product);
     } catch (error) {
       console.error('Error creating product:', error);
       
       if (error instanceof z.ZodError) {
+        console.error('Zod validation error:', error.errors);
         return res.status(400).json({ error: 'Validation error', details: error.errors });
       }
       
+      console.error('Detailed error:', error);
+      
       res.status(500).json({ 
         error: 'Failed to create product',
-        details: error.message
+        message: typeof error === 'object' && error !== null ? JSON.stringify(error) : String(error)
       });
     }
   });

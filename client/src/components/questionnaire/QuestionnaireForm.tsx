@@ -128,38 +128,21 @@ export default function QuestionnaireForm() {
   const mutation = useMutation({
     mutationFn: async (values: FormValues) => {
       try {
-        // Prepare a minimal product data with required fields
-        const productData = {
-          // Core fields from form
-          name: values.name,
-          description: values.description,
-          category: values.category,
-          industry: values.industry,
-          businessModel: values.businessModel,
-          launchYear: values.launchYear,
-          features: values.features,
-          isActive: values.isActive,
-          logo: values.logo,
-          
-          // Optional fields that may be empty
-          thirdPartyRating: values.thirdPartyRating || "",
-          numberOfClients: values.numberOfClients || "",
-          totalUsers: values.totalUsers || "",
-          activeUsers: values.activeUsers || "",
-          revenue: values.revenue || "",
-          averageDealSize: values.averageDealSize || "",
-          averageSalesCycle: values.averageSalesCycle || "",
-          investmentHistory: values.investmentHistory || "",
-          techStack: values.techStack || "",
-          ipDetails: values.ipDetails || "",
-          parentCompanyBackground: values.parentCompanyBackground || "",
-          additionalDetails: values.additionalDetails || "",
-          brochureUrl: values.brochureUrl || "",
+        // Create minimal product data with only essential fields
+        const simpleProductData = {
+          name: values.name || "New Product",
+          description: values.description || "Product description",
+          category: values.category || "SaaS",
+          industry: values.industry || "Technology",
+          businessModel: values.businessModel || "B2B",
+          features: values.features || "Product features",
+          launchYear: values.launchYear || "2023",
+          isActive: values.isActive
         };
         
-        console.log("Submitting product data:", productData);
+        console.log("Submitting simplified product data:", simpleProductData);
         
-        const response = await apiRequest("POST", "/api/products", productData);
+        const response = await apiRequest("POST", "/api/products", simpleProductData);
         return response.json();
       } catch (error) {
         console.error("Error in mutation function:", error);
@@ -173,12 +156,18 @@ export default function QuestionnaireForm() {
       });
       navigate(`/product/${data.id}`);
     },
-    onError: (error) => {
+    onError: (error: any) => {
       console.error("Error submitting product:", error);
+      
+      // Get more detailed error information if available
+      const errorMessage = error?.response?.data?.details 
+        || error?.message 
+        || "Unknown error occurred";
+      
       toast({
         variant: "destructive",
         title: "Submission Error",
-        description: "There was a problem submitting your product listing. Please check your information and try again.",
+        description: `Unable to submit product: ${errorMessage}`,
       });
     },
   });
